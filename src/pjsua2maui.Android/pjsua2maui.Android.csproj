@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net7.0-android</TargetFramework>
+		<SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>pjsua2maui.pjsua2</RootNamespace>
+		<IsBindingProject>true</IsBindingProject>
+		<ProduceReferenceAssemblies>True</ProduceReferenceAssemblies>
+		<CopyRefAssembliesToPublishDirectory>True</CopyRefAssembliesToPublishDirectory>
+		<ImplicitUsings>true</ImplicitUsings>
+		<IsBindingProject>true</IsBindingProject>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+		<Deterministic>False</Deterministic>
+		<DebugType>Embedded</DebugType>
+		<EmbedAllSources>True</EmbedAllSources>
+		<NoBindingEmbedding>False</NoBindingEmbedding> 
+	</PropertyGroup>
+	<ItemGroup>
+		<AndroidNativeLibrary Update="lib\armeabi-v7a\libssl.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\armeabi-v7a\libopenh264.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\armeabi-v7a\libcrypto.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\armeabi-v7a\libc++_shared.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\armeabi-v7a\libpjsua2.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\x86\libssl.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\x86\libopenh264.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\x86\libcrypto.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\x86\libc++_shared.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\x86\libpjsua2.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\arm64-v8a\libssl.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\arm64-v8a\libopenh264.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\arm64-v8a\libcrypto.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\arm64-v8a\libc++_shared.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\arm64-v8a\libpjsua2.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\x86_64\libssl.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\x86_64\libopenh264.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\x86_64\libcrypto.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\x86_64\libc++_shared.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Update="lib\x86_64\libpjsua2.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AndroidNativeLibrary>
+	</ItemGroup>
+</Project>

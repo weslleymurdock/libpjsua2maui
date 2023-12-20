@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net7.0-ios</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Version>1.0.0</Version>
+		<IsBindingProject>true</IsBindingProject>
+		<ProduceReferenceAssemblies>True</ProduceReferenceAssemblies>
+		<CopyRefAssembliesToPublishDirectory>True</CopyRefAssembliesToPublishDirectory>
+		<ImplicitUsings>true</ImplicitUsings>
+		<IsBindingProject>true</IsBindingProject>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+		<Deterministic>False</Deterministic>
+		<DebugType>Embedded</DebugType>
+		<EmbedAllSources>True</EmbedAllSources>
+		<NoBindingEmbedding>False</NoBindingEmbedding>
+		<UseInterpreter>True</UseInterpreter>
+		<MtouchProfiling>True</MtouchProfiling>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">17.2</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<ObjcBindingApiDefinition Include="ApiDefinition.cs" />
+		<ObjcBindingCoreSource Include="StructsAndEnums.cs" />
+	</ItemGroup>
+	<ItemGroup Condition="$(RuntimeIdentifier.Contains('simulator'))">
+		<NativeReference Include="lib\x86_64\*.a">
+			<Kind>Static</Kind>
+			<SmartLink>True</SmartLink>
+			<ForceLoad>True</ForceLoad>
+			<IsCxx>True</IsCxx>
+		</NativeReference>
+	</ItemGroup>
+	<ItemGroup Condition="!$(RuntimeIdentifier.Contains('simulator'))">
+		<NativeReference Include="lib\arm64\*.a">
+			<Kind>Static</Kind>
+			<SmartLink>True</SmartLink>
+			<ForceLoad>True</ForceLoad>
+			<IsCxx>True</IsCxx>
+		</NativeReference>
+	</ItemGroup>
+</Project>
