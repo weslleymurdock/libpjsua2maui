@@ -470,9 +470,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-#Android Native Libraries
-*.so
-
-#iOS Native Libraries
-*.a
+ 
