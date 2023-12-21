@@ -48,10 +48,10 @@ jobs:
           java-version: '11'
           
       - name: Restore Dependencies
-        run: dotnet restore /pjsua2maui/pjsua2maui.Android.csproj
+        run: dotnet restore src/pjsua2maui/pjsua2maui.Android.csproj
 
       - name: Build MAUI Android
-        run: dotnet publish /pjsua2maui/pjsua2maui.Androidcsproj -c Release -f net7.0-android --no-restore
+        run: dotnet publish src/pjsua2maui/pjsua2maui.Androidcsproj -c Release -f net7.0-android --no-restore
        
       - name: Restore Dependencies
         run: dotnet restore src/pjsua2maui/pjsua2maui.iOS.csproj
