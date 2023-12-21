@@ -1,0 +1,70 @@
+name: build
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+    
+  pull_request:
+    types: [opened, synchronize, reopened]  
+  
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: true                     # Disable the .NET logo
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
+
+jobs:
+  build:
+    runs-on: macos-13
+    name: iOS Build
+    steps:
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '14.3.1'
+
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+
+      - name: Setup .NET 7
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            7.0.x
+      - name: Install MAUI Workload
+        run: dotnet workload install maui --ignore-failed-sources
+        
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'microsoft'
+          java-version: '11'
+          
+      - name: Restore Dependencies
+        run: dotnet restore /pjsua2maui/pjsua2maui.Android.csproj
+
+      - name: Build MAUI Android
+        run: dotnet publish /pjsua2maui/pjsua2maui.Androidcsproj -c Release -f net7.0-android --no-restore
+       
+      - name: Restore Dependencies
+        run: dotnet restore src/pjsua2maui/pjsua2maui.iOS.csproj
+
+      - name: Build MAUI iOS
+        run: |
+          dotnet build src/pjsua2maui/pjsua2maui.iOS.csproj -c Release -f net7.0-ios -r ios-arn64 --no-restore /p:buildForSimulator=False /p:packageApp=True /p:ArchiveOnBuild=False          
+          dotnet build src/pjsua2maui/pjsua2maui.iOS.csproj -c Release -f net7.0-ios -r iossimulator-x64 --no-restore /p:buildForSimulator=True /p:packageApp=True /p:ArchiveOnBuild=False
+ 
+      - name: Restore Dependencies
+        run: dotnet restore src/pjsua2maui/pjsua2maui.csproj
+
+      - name: Build MAUI ClassLib
+        run: dotnet build  src/pjsua2maui/pjsua2maui.csproj -c Release -f net7.0-ios --no-restore /p:packageApp=True /p:ArchiveOnBuild=False
+ 
+       

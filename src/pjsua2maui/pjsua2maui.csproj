@@ -27,25 +27,23 @@
 		<PackageTags>pjsip pjsua2 sip voip maui pjsua2maui</PackageTags>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageReleaseNotes>v1.0.0 - 2023-12-20
-## Added
-
-* iOS bindings
-* Android bindings.
-* Support for the third party libs.
-  - openh264 for both android and ios.
-  - opus codec for both android and ios
-  - openssl for both android and ios (on ios using openssl-for-iphone fork)
-
-## Fixed
+		## Added
+		* iOS bindings
+		* Android bindings.
+		* Support for the third party libs.
+		  - openh264 for both android and ios.
+		  - opus codec for both android and ios
+		  - openssl for both android and ios (on ios using openssl-for-iphone fork)
 		</PackageReleaseNotes>
 		<Description>
 		Provides .NET bindings for libpjsua2 by pjsip.
 		Pjsip version used is 2.14, using thirdy party libs such as openh264, openssl and opus			
 		</Description>
-		<PackageProjectUrl>https://onboardcode.github.io/pjsua2maui/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/onboardcode/pjsua2maui.git</RepositoryUrl>
+		<PackageProjectUrl>https://weslleymurdock.github.io/pjsua2maui/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/weslleymurdock/pjsua2maui.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<IncludeSymbols>true</IncludeSymbols>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
@@ -55,7 +53,7 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
-	  <CreatePackage>false</CreatePackage>
+		<CreatePackage>false</CreatePackage>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="Platforms\Android\" />
@@ -80,11 +78,11 @@
 		<AndroidJavaSource Include="Platforms\Android\org\pjsip\PjCamera.java" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="..\NUGET_README.md" Pack="true" PackagePath="\README.md" />
-	</ItemGroup>  
+		<None Include="..\NUGET.md" Pack="true" PackagePath="\README.md" />
+	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\pjsua2maui.Android\pjsua2maui.Android.csproj" Condition="$(TargetFramework.Contains('-android'))" />
-	  <ProjectReference Include="..\pjsua2maui.iOS\pjsua2maui.iOS.csproj" Condition="$(TargetFramework.Contains('-ios')) "/>
+		<ProjectReference Include="..\pjsua2maui.Android\pjsua2maui.Android.csproj" Condition="$(TargetFramework.Contains('-android'))" IncludeAssets="all" />
+		<ProjectReference Include="..\pjsua2maui.iOS\pjsua2maui.iOS.csproj" Condition="$(TargetFramework.Contains('-ios'))" IncludeAssets="all" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
