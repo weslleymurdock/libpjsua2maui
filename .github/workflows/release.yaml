@@ -16,6 +16,8 @@ jobs:
   build:
     runs-on: macos-13
     name: Build
+    permissions:
+      contents: write
     steps:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
