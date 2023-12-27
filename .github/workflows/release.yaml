@@ -1,18 +1,9 @@
-name: build
+name: release .nupkg's
 
 on:
   push:
-    branches: [ main, develop ]
-    paths-ignore:
-      - '**/*.md'
-      - '**/*.gitignore'
-      - '**/*.gitattributes'
-    
-  pull_request:
-    types: [opened, synchronize, reopened]  
-  
-  workflow_dispatch:
-
+    tags: 
+        '*' 
 permissions:
   contents: read
 
@@ -85,3 +76,33 @@ jobs:
         run: |
           cd ${{ github.workspace }}/src
           ./pack
+
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+            draft: false
+            prerelease: false
+            release_name: ${{ github.ref }}
+            tag_name: ${{ github.ref }}
+            body_path: CHANGELOG.md
+        env: 
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: upload ios .nupkg 
+        uses: actions/upload-release-asset@v1
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            asset_path: ./libpjsua2.maui.ios.nupkg
+            asset_name: libpjsua2.maui.ios.nupkg
+            asset_content_type: application/zip
+      - name: upload android .nupkg 
+        uses: actions/upload-release-asset@v1
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            asset_path: ./libpjsua2.maui.android.nupkg
+            asset_name: libpjsua2.maui.android.nupkg
+            asset_content_type: application/zip
