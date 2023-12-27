@@ -50,8 +50,8 @@ jobs:
          
       - name: Download Android Artifacts
         run: |
-          curl -o ./libpjsua2.maui.so.tar.gz https://github.com/weslleymurdock/libpjsua2-android/releases/download/v1.0.0/libpjsua2.tar.gz
-          tar -xvf libpjsua2.maui.so.tar.gz 
+          curl -L -o ./libpjsua2.maui.so.tar.gz https://github.com/weslleymurdock/libpjsua2-android/releases/download/v1.0.0/libpjsua2.tar.gz
+          tar -xzvf libpjsua2.maui.so.tar.gz 
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/org/pjsip
           mkdir -p ${{ github.workspace }}/src/libpjsua2.maui.android/Platforms/Android/pjsua2
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/lib/
@@ -62,8 +62,8 @@ jobs:
 
       - name: Download iOS Artifacts
         run: |
-          curl -o ./libpjsua2.maui.a.tar.gz https://github.com/weslleymurdock/libpjsua2-ios/releases/download/v1.0.0/libpjsua2.tar.gz
-          tar -xvf libpjsua2.maui.a.tar.gz
+          curl -L -o ./libpjsua2.maui.a.tar.gz https://github.com/weslleymurdock/libpjsua2-ios/releases/download/v1.0.0/libpjsua2.tar.gz
+          tar -xzvf libpjsua2.maui.a.tar.gz
           mkdir -p ${{ github.workspace }}/src/libpjsua2.maui.ios/Platforms/iOS/pjsua2
           mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/
           mv ${{ github.workspace }}/libpjsua2/lib/pjsua2maui/pjsua2 ${{ github.workspace }}/src/libpjsua2.maui.ios/Platforms/iOS/pjsua2
