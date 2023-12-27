@@ -75,7 +75,7 @@ jobs:
       - name: pack
         run: |
           cd ${{ github.workspace }}/src
-          ./pack
+          ./pack.sh
 
       - name: release
         uses: actions/create-release@v1
