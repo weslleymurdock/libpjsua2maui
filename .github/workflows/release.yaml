@@ -11,7 +11,7 @@ env:
   DOTNET_NOLOGO: true                     # Disable the .NET logo
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
   DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
-
+  PACKAGE_VERSION: '1.2.14'
 jobs:
   build:
     runs-on: macos-13
@@ -96,7 +96,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ${{ github.workspace }}/src/libpjsua2.maui.ios.nupkg
+            asset_path: ${{ github.workspace }}/src/libpjsua2.maui.ios.${{ env.PACKAGE_VERSION }}.nupkg
             asset_name: libpjsua2.maui.ios.nupkg
             asset_content_type: application/zip
       - name: upload android .nupkg 
@@ -105,6 +105,6 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ${{ github.workspace }}/src/libpjsua2.maui.android.nupkg
+            asset_path: ${{ github.workspace }}/src/libpjsua2.maui.android.${{ env.PACKAGE_VERSION }}.nupkg
             asset_name: libpjsua2.maui.android.nupkg
             asset_content_type: application/zip
