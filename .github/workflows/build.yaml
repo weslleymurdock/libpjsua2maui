@@ -55,10 +55,10 @@ jobs:
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/org/pjsip
           mkdir -p ${{ github.workspace }}/src/libpjsua2.maui.android/Platforms/Android/pjsua2
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/lib/
-          mv ${{ github.workspace }}/home/runner/libpjsua2/lib/libpjsua2.maui.android/ ${{ github.workspace }}/src/libpjsua2.maui.android/Platforms/Android/pjsua2
+          mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/libpjsua2.maui.android/* ${{ github.workspace }}/src/libpjsua2.maui.android/Platforms/Android/pjsua2
           rm -rf ${{ github.workspace }}/home/runner/libpjsua2/lib/java/org/pjsip/pjsua2
-          mv ${{ github.workspace }}/home/runner/libpjsua2/lib/java/org/pjsip ${{ github.workspace }}/src/libpjsua2.so/org/pjsip
-          mv ${{ github.workspace }}/home/runner/libpjsua2/lib/ ${{ github.workspace }}/src/libpjsua2.so/lib
+          mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/java/org/pjsip/* ${{ github.workspace }}/src/libpjsua2.so/org/pjsip/
+          mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/* ${{ github.workspace }}/src/libpjsua2.so/lib/*
 
       - name: Download iOS Artifacts
         run: |
@@ -66,8 +66,8 @@ jobs:
           tar -xzvf libpjsua2.maui.a.tar.gz
           mkdir -p ${{ github.workspace }}/src/libpjsua2.maui.ios/Platforms/iOS/pjsua2
           mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/
-          mv ${{ github.workspace }}/libpjsua2/lib/pjsua2maui/pjsua2 ${{ github.workspace }}/src/libpjsua2.maui.ios/Platforms/iOS/pjsua2
-          mv ${{ github.workspace }}/libpjsua2/lib/ ${{ github.workspace }}/src/libpjsua2.a/lib/
+          mv -v ${{ github.workspace }}/libpjsua2/lib/pjsua2maui/pjsua2/* ${{ github.workspace }}/src/libpjsua2.maui.ios/Platforms/iOS/pjsua2
+          mv -v ${{ github.workspace }}/libpjsua2/lib/* ${{ github.workspace }}/src/libpjsua2.a/lib/
 
       - name: Restore Dependencies
         run: dotnet restore src/libpjsua2.maui.android/libpjsua2.maui.android.csproj
