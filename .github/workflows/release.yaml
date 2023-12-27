@@ -96,7 +96,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./libpjsua2.maui.ios.nupkg
+            asset_path: ${{ github.workspace }}/src/libpjsua2.maui.ios.nupkg
             asset_name: libpjsua2.maui.ios.nupkg
             asset_content_type: application/zip
       - name: upload android .nupkg 
@@ -105,6 +105,6 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./libpjsua2.maui.android.nupkg
+            asset_path: ${{ github.workspace }}/src/libpjsua2.maui.android.nupkg
             asset_name: libpjsua2.maui.android.nupkg
             asset_content_type: application/zip
