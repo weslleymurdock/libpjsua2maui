@@ -3,7 +3,7 @@
     <metadata>
         <id>libpjsua2.maui.ios</id>
         <title>libpjsua2.maui.ios</title>
-        <version>1.2.14</version>
+        <version>1.2.14.010</version>
         <authors>Weslley Murdock</authors> 
         <projectUrl>http://github.com/weslleymurdock/pjsua2maui</projectUrl>
         <description>.NET MAUI bindings for pjsua2 

@@ -48,38 +48,36 @@ jobs:
           distribution: 'microsoft'
           java-version: '11'
          
-      - name: Download Android Artifacts
+      - name: Download Android & iOS Artifacts
         run: |
+          echo "Android ..."
           curl -L -o ./libpjsua2.maui.so.tar.gz https://github.com/weslleymurdock/libpjsua2-android/releases/download/v1.0.0/libpjsua2.tar.gz
           tar -xzvf libpjsua2.maui.so.tar.gz 
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/org/pjsip
-          mkdir -p ${{ github.workspace }}/src/libpjsua2.maui.android/Platforms/Android/pjsua2
+          mkdir -p ${{ github.workspace }}/src/pjsua2.maui.android/pjsua2
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/lib/
-          mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/libpjsua2.maui.android/* ${{ github.workspace }}/src/libpjsua2.maui.android/Platforms/Android/pjsua2
+          mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/libpjsua2.maui.android/* ${{ github.workspace }}/src/pjsua2.maui/pjsua2
           rm -rf ${{ github.workspace }}/home/runner/libpjsua2/lib/java/org/pjsip/pjsua2
           mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/java/org/pjsip/* ${{ github.workspace }}/src/libpjsua2.so/org/pjsip/
           mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/* ${{ github.workspace }}/src/libpjsua2.so/lib/
-
-      - name: Download iOS Artifacts
-        run: |
+          echo "iOS ..."
           curl -L -o ./libpjsua2.maui.a.tar.gz https://github.com/weslleymurdock/libpjsua2-ios/releases/download/v1.0.0/libpjsua2.tar.gz
           tar -xzvf libpjsua2.maui.a.tar.gz
-          mkdir -p ${{ github.workspace }}/src/libpjsua2.maui.ios/Platforms/iOS/pjsua2
+          mkdir -p ${{ github.workspace }}/src/pjsua2.maui.ios/pjsua2
           mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/
-          mv -v ${{ github.workspace }}/libpjsua2/lib/pjsua2maui/pjsua2/* ${{ github.workspace }}/src/libpjsua2.maui.ios/Platforms/iOS/pjsua2
+          mv -v ${{ github.workspace }}/libpjsua2/lib/pjsua2maui/pjsua2/* ${{ github.workspace }}/src/pjsua2.maui.ios/pjsua2
           mv -v ${{ github.workspace }}/libpjsua2/lib/* ${{ github.workspace }}/src/libpjsua2.a/lib/
 
       - name: Restore Dependencies
-        run: dotnet restore src/libpjsua2.maui.android/libpjsua2.maui.android.csproj
+        run: | 
+          dotnet restore src/pjsua2.maui.android/pjsua2.maui.android.csproj
+          dotnet restore src/pjsua2.maui.ios/pjsua2.maui.ios.csproj
 
       - name: Build MAUI Android
-        run: dotnet publish src/libpjsua2.maui.android/libpjsua2.maui.android.csproj -c Release -f net7.0-android --no-restore
+        run: dotnet publish src/pjsua2.maui.android/pjsua2.maui.android.csproj -c Release -f net7.0-android --no-restore
        
-      - name: Restore Dependencies
-        run: dotnet restore src/libpjsua2.maui.ios/libpjsua2.maui.ios.csproj
-
-      - name: Build MAUI iOS
-        run: dotnet build src/libpjsua2.maui.ios/libpjsua2.maui.ios.csproj -c Release -f net7.0-ios --no-restore           
+      - name: Build MAUI Android
+        run: dotnet publish src/pjsua2.maui.ios/pjsua2.maui.ios.csproj -c Release -f net7.0-ios --no-restore
       
       - name: pack
         run: |
