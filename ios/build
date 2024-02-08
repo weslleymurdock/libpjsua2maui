@@ -707,7 +707,7 @@ function create_framework {
 function copy_swig_bindings () {
     cd $BASE_DIR
     if [ -d "$PJSIP_SRC_DIR/pjsip-apps/src/swig/csharp/pjsua2maui/pjsua2maui" ]; then 
-        cp -v -r "$PJSIP_SRC_DIR/pjsip-apps/src/swig/csharp/pjsua2maui/pjsua2maui" "pjsua2maui/lib/"
+        cp -v -r "$PJSIP_SRC_DIR/pjsip-apps/src/swig/csharp/pjsua2maui/pjsua2maui" "lib/"
     fi
 }
 start=`date +%s`
