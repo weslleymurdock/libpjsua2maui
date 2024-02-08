@@ -6,3 +6,7 @@
 	path = third_party/opus
 	url = https://github.com/xiph/opus.git
 	branch = main
+[submodule "third_party/openh264"]
+	path = third_party/openh264
+	url = https://github.com/cisco/openh264.git
+	branch = master
