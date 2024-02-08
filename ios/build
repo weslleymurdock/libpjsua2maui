@@ -234,7 +234,7 @@ function build_ssl () {
         fi
     done
 
-    ./build-libssl.sh --version=1.1.1d --archs="${USE_ARCHS[*]// /\s}" --ios-min-sdk=${MIN_IOS_VERSION} --targets="$targets"|| exit
+    ./build-libssl.sh --version=1.1.1v --archs="${USE_ARCHS[*]// /\s}" --ios-min-sdk=${MIN_IOS_VERSION} --targets="$targets"|| exit
     mv include include2
     mkdir -p include
     mv include2/openssl include/openssl
