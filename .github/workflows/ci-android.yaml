@@ -40,7 +40,7 @@ jobs:
     - name: Prepare build system
       run: |
         cd ${{ github.workspace }}/android
-        sudo ./prepare-build-system
+        sudo ./prepare
     - name: Build openssl
       run: |
         cd ${{ github.workspace }}/android
