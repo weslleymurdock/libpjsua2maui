@@ -43,7 +43,7 @@ jobs:
         run: |   
           sudo mv /Applications/Xcode_15.1.app /Applications/Xcode.app
           sed -i'' -e 's/xamarin/maui/g' ${{ github.workspace }}/pjproject/pjsip-apps/src/swig/csharp/Makefile
-          ${{ github.workspace }}/ios/./build --ssl --opus --h264 -a=x86_64,arm64
+          sudo ${{ github.workspace }}/ios/./build --ssl --opus --h264 -a=x86_64,arm64
       
       - uses: actions/upload-artifact@v3
         with:
