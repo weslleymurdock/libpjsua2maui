@@ -10,3 +10,7 @@
 	path = third_party/openh264
 	url = https://github.com/cisco/openh264.git
 	branch = master
+[submodule "third_party/openssl"]
+	path = third_party/openssl
+	url = https://github.com/openssl/openssl.git
+	branch = master
