@@ -14,7 +14,7 @@ set -e
 
 function initialSetup {
     CUR_DIR="$(pwd)"
-    OPENSSL_SRC_PATH=$pwd"../third_party/openssl"
+    OPENSSL_SRC_PATH="$(pwd)/../third_party/openssl"
     OPENSSL_TMP_FOLDER="/tmp/openssl"
 }
 
