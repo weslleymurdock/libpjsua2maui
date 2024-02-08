@@ -501,7 +501,7 @@ function _build () {
     export LDFLAGS="${LDFLAGS} -lstdc++"
     
     if [ "$arch" == "i386" ] || [ "$arch" == "x86_64" ]; then
-        export MIN_IOS="-mios-simulator-version-min=${MIN_IOS_VERSION}"
+        export MIN_IOS="-miphonesimulator-version-min=${MIN_IOS_VERSION}"
     else
         export MIN_IOS="-miphoneos-version-min=${MIN_IOS_VERSION}"
     fi
