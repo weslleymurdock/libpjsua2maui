@@ -12,9 +12,8 @@ set -e
 ############################      FUNCTIONS     ##############################
 ##############################################################################
 
-function initialSetup {
-    CUR_DIR="$(pwd)"
-    OPENSSL_SRC_PATH="$(pwd)/../third_party/openssl"
+function initialSetup { 
+    OPENSSL_SRC_PATH="$BASEDIR/third_party/openssl"
     OPENSSL_TMP_FOLDER="/tmp/openssl"
 }
 

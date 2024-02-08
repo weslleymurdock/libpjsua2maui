@@ -13,7 +13,7 @@ set -e
 function initialSetup {
     NDK_PATH="$DOWNLOAD_DIR/$NDK_DIR_NAME"
     SDK_TOOLS_PATH="$DOWNLOAD_DIR/${SDK_DIR_NAME}"/tools
-    OPENH264_SRC_PATH=$pwd/../third_party/openh264
+    OPENH264_SRC_PATH="$BASEDIR/third_party/openh264"
     OPENH264_TMP_DIR="/tmp/openh264"
 }
 

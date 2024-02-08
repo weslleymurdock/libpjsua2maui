@@ -3,7 +3,7 @@
 . config.conf
 
 NDK_PATH="$DOWNLOAD_DIR/${NDK_DIR_NAME}"
-OPUS_PATH=$pwd/"../third_party/opus"
+OPUS_PATH="$BASEDIR/third_party/opus"
 LIB_PATH="${OPUS_BUILD_OUT_PATH}/libs"
 LOG_PATH="${OPUS_BUILD_OUT_PATH}/logs"
 
