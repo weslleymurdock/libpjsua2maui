@@ -83,7 +83,7 @@ clearBuildDirectory
 ##############################################################################
 ############################        MAIN          ############################
 ##############################################################################
-
+cd $BASE_DIR/third_party/openh264
 for arch in "${TARGET_ARCHS[@]}"
 do
     echo "Building OpenH264 for target arch $arch ..."
@@ -98,9 +98,9 @@ do
     # Add final architecture dependent info
     finalizeArgs $arch
 
-    make ${ARGS} >> "${LOG_PATH}/${arch}.log" 2>&1
+    make ${ARGS} #>> "${LOG_PATH}/${arch}.log" 2>&1
     mkdir -p ${LIB_PATH}/${arch}
-    make ${ARGS} install >> "${LOG_PATH}/${arch}.log" 2>&1
+    make ${ARGS} install #>> "${LOG_PATH}/${arch}.log" 2>&1
 done
 
 echo "Finished building OpenH264! Check output folder: ${OPENH264_BUILD_OUT_PATH}"
