@@ -1,0 +1,66 @@
+name: Build native libraries for iOS
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+    
+  pull_request:
+    types: [opened, synchronize, reopened]  
+  
+  workflow_dispatch:
+
+permissions:
+  contents: [ read, write ]
+
+env:
+  DOTNET_NOLOGO: true                     # Disable the .NET logo
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Prepare Environment
+      run: |
+        cd ${{ github.workspace }}
+        sudo mkdir -p /home/runner/pjsua2maui
+        sudo apt-get update
+        sudo apt-get purge -y openjdk*
+        sudo apt-get install -y openjdk-8-jdk
+
+        DEPS="unzip git curl bzip2 binutils make autoconf openssl \
+          libssl-dev libopus0 libpcre3 libpcre3-dev build-essential nasm python2 swig" 
+        sudo sh -c "dpkg --add-architecture i386; apt-get update && apt-get -y upgrade && apt-get install -y ${DEPS}"
+    - name: Prepare build system
+      run: |
+        cd ${{ github.workspace }}/android
+        sudo ./prepare-build-system
+    - name: Build openssl
+      run: |
+        cd ${{ github.workspace }}/android
+        sudo ./openssl-build-target-archs
+    - name: Build openh264
+      run: |
+        cd ${{ github.workspace }}/android
+        sudo ./openh264-build-target-archs
+    - name: Build opus
+      run: |
+        cd ${{ github.workspace }}/android
+        sudo ./opus-build
+    - name: Build pjsua2
+      run: |
+        cd ${{ github.workspace }}/android
+        sudo ./build
+    - name: Finalize
+      run : |
+        echo "done building"
+    - uses: actions/upload-artifact@v3
+      with:
+        name: lipjsua2-android
+        path: /home/lib

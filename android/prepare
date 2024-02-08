@@ -1,0 +1,97 @@
+#!/bin/bash -e
+
+. config.conf
+
+# Check if script is run with sudo privileges
+HAS_PRIVILEGES=$(id -u)
+if [ $HAS_PRIVILEGES -ne 0 ]
+then
+  echo "Run as root or with sudo"
+  exit 1
+fi
+
+# Create Download directory if it does not exist
+if [ ! -d "$DOWNLOAD_DIR" ]
+then
+  mkdir $DOWNLOAD_DIR
+fi
+
+# Create Build directory if it does not exist
+if [ ! -d "$BUILD_DIR" ]
+then
+  mkdir $BUILD_DIR
+fi
+ 
+if [ "$DOWNLOAD_NDK" == "1" ]
+then
+
+    echo ""
+    echo "Downloading Android NDK ${NDK_VERSION} ..."
+    echo ""
+
+    cd $DOWNLOAD_DIR
+    curl -L -# -o ndk.zip "$NDK_DOWNLOAD_URL" 2>&1
+    rm -rf "$NDK_DIR_NAME"
+    echo ""
+    echo "Android NDK downloaded!"
+    echo ""
+    echo "Extracting Android NDK ..."
+    echo ""
+    unzip ndk.zip -d ndk
+    mv ndk/$NDK_DIR_NAME .
+    rm -rf ndk
+    rm -rf ndk.zip
+fi
+
+if [ "$DOWNLOAD_SDK" == "1" ]
+then
+    CMD_ZIP_FILE="$CMD_TOOLS.zip"
+
+    echo ""
+    echo "Downloading Android CMD Line Tools version ${CMD_TOOLS_VERSION} ..."
+    cd $DOWNLOAD_DIR
+    curl -L -# -o $CMD_ZIP_FILE $CMD_TOOLS_DOWNLOAD_URL 2>&1
+    echo ""
+    echo "Android CMD Tools downloaded!"
+    echo "Extracting Android CMD Tools ..."
+    rm -rf $SDK_DIR_NAME
+    unzip -d $SDK_DIR_NAME $CMD_ZIP_FILE
+
+    # Remove zip file
+    rm -rf $CMD_ZIP_FILE
+
+    # Create empty repositories.cfg file to avoid warning
+    mkdir -p ~/.android
+    touch ~/.android/repositories.cfg
+
+    # Since new updates, there are some changes that are not mentioned in the documentation.
+    # After unzipping the command line tools package, the top-most directory you'll get is $CMD_TOOLS.
+    # Rename the unpacked directory from $CMD_TOOLS to $CMD_TOOLS_DIR_NAME, and place it under $ANDROID_HOME/$CMD_TOOLS
+    # which will then look like $ANDROID_HOME/$CMD_TOOLS/$CMD_TOOLS_DIR_NAME
+    cd $SDK_DIR_NAME/$CMD_TOOLS
+    mkdir -p $CMD_TOOLS_DIR_NAME
+    mv `ls | grep -w -v $CMD_TOOLS_DIR_NAME` $CMD_TOOLS_DIR_NAME
+fi
+
+if [ "$DOWNLOAD_ANDROID_APIS" == "1" ]
+then
+    echo "Exporting ANDROID_HOME"
+    export ANDROID_HOME=$DOWNLOAD_DIR/$SDK_DIR_NAME
+    SDK_MANAGER=$ANDROID_HOME/$CMD_TOOLS/$CMD_TOOLS_DIR_NAME/bin/sdkmanager
+    echo "Downloading Android Platforms"
+    for api in ${SETUP_ANDROID_APIS[@]}
+    do
+        echo yes | $SDK_MANAGER "platforms;android-$api"
+    done
+
+    echo "Downloading Android Platform-Tools"
+    echo yes | $SDK_MANAGER "platform-tools"
+    echo "Exporting TOOLS & PLATFORM_TOOLS"
+    export PATH=$ANDROID_HOME/platform-tools/:$ANDROID_HOME/tools:$PATH
+
+    echo "Downloading Android Build-Tools"
+    echo yes | $SDK_MANAGER "build-tools;$ANDROID_BUILD_TOOLS"
+fi
+
+echo ""
+echo "The build system is ready! Execute: ./build to build PJSIP"
