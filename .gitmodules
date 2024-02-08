@@ -2,3 +2,7 @@
 	path = pjproject
 	url = https://github.com/pjsip/pjproject.git
 	branch = main
+[submodule "third_party/opus"]
+	path = third_party/opus
+	url = https://github.com/xiph/opus.git
+	branch = main
