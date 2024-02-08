@@ -1,4 +1,4 @@
-name: Build native libraries for iOS
+name: Build native libraries for Android
 
 on:
   push:
@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: [ read, write ]
+  contents:   write  
 
 env:
   DOTNET_NOLOGO: true                     # Disable the .NET logo
@@ -44,15 +44,15 @@ jobs:
     - name: Build openssl
       run: |
         cd ${{ github.workspace }}/android
-        sudo ./openssl-build-target-archs
+        sudo ./openssl
     - name: Build openh264
       run: |
         cd ${{ github.workspace }}/android
-        sudo ./openh264-build-target-archs
+        sudo ./openh264
     - name: Build opus
       run: |
         cd ${{ github.workspace }}/android
-        sudo ./opus-build
+        sudo ./opus
     - name: Build pjsua2
       run: |
         cd ${{ github.workspace }}/android

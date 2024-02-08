@@ -728,8 +728,7 @@ else
     build_opus
     config_site
     build_archs 
-    copy_swig_bindings
-    merge
+    copy_swig_bindings 
     #create_framework
 fi
 
