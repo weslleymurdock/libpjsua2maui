@@ -471,16 +471,18 @@ function _build () {
         export CFLAGS="${CFLAGS} -fembed-bitcode"
     fi
 
-    
+    export $IPHONESDK = ""
     if [ $SSL_SUPPORT = true ]; then 
         if [ "$arch" != "i386" ] && [ "$arch" != "x86_64" ]; then
             configure="$configure --with-ssl=${SSL_BUILD_DIR}/bin/iPhoneOS${IOS_SDK_VERSION}-${arch}.sdk"
             export CFLAGS="${CFLAGS} -I${SSL_BUILD_DIR}/bin/iPhoneOS${IOS_SDK_VERSION}-${arch}.sdk/include"
             export LDFLAGS="${LDFLAGS} -L${SSL_BUILD_DIR}/bin/iPhoneOS${IOS_SDK_VERSION}-${arch}.sdk/lib"
+            export IPHONESDK="iPhoneOS${IOS_SDK_VERSION}-${arch}.sdk"
         else
             configure="$configure --with-ssl=${SSL_BUILD_DIR}/bin/iPhoneSimulator${IOS_SDK_VERSION}-${arch}.sdk"
             export CFLAGS="${CFLAGS} -I${SSL_BUILD_DIR}/bin/iPhoneSimulator${IOS_SDK_VERSION}-${arch}.sdk/include"
             export LDFLAGS="${LDFLAGS} -L${SSL_BUILD_DIR}/bin/iPhoneSimulator${IOS_SDK_VERSION}-${arch}.sdk/lib"
+            export IPHONESDK="iPhoneSimulator${IOS_SDK_VERSION}-${arch}.sdk"
         fi
     fi
 
@@ -707,8 +709,17 @@ function create_framework {
 function copy_swig_bindings () {
     cd $BASE_DIR
     if [ -d "$PJSIP_SRC_DIR/pjsip-apps/src/swig/csharp/pjsua2maui/pjsua2maui" ]; then 
-        cp -v -r "$PJSIP_SRC_DIR/pjsip-apps/src/swig/csharp/pjsua2maui/pjsua2maui" "lib/"
+        cp -v -r "$PJSIP_SRC_DIR/pjsip-apps/src/swig/csharp/pjsua2maui/pjsua2maui/pjsua2" "lib/"
     fi
+}
+
+function build_dotnet_library {
+    cd "$BASE_DIR/src/libpjsua2.a/" 
+    cp -r -v "$BASE_DIR/lib" "$BASE_DIR/src/libpjsua2.a"
+    mv -v "$BASE_DIR/src/libpjsua2.a/pjsua2" "$BASE_DIR/src/pjsua2.maui.ios/"
+    cd "$BASE_DIR/src/pjsua2.maui.ios/"
+    dotnet restore pjsua2.maui.ios.csproj 
+    dotnet build pjsua2.maui.ios.csproj
 }
 start=`date +%s`
 
@@ -729,6 +740,7 @@ else
     config_site
     build_archs 
     copy_swig_bindings 
+    #build_dotnet_library
     #create_framework
 fi
 

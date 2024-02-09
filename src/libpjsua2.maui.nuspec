@@ -46,9 +46,9 @@
     <files>
         <file src="libpjsua2.maui.targets" target="build\libpjsua2.maui.targets" />
         <file src="libpjsua2.a\lib\x86_64\libpjsua2.a"
-            target="runtime\iossimulator-x64\libpjsua2.a" />
+            target="runtimes\iossimulator-x64\native\libpjsua2.a" />
         <file src="libpjsua2.a\lib\arm64\libpjsua2.a"
-            target="runtime\ios-arm64\libpjsua2.a" />
+            target="runtimes\ios-arm64\native\libpjsua2.a" />
 
         <file src="libpjsua2.so\lib\armeabi-v7a\libpjsua2.so"
             target="build\native\android-armv7\libpjsua2.so" />
@@ -91,14 +91,10 @@
             target="build\native\android-x86_64\libc++_shared.so" />
 
         <file src="libpjsua2.so\org\pjsip\*.java" target="content" />
-        <file src="pjsua2.maui.ios\bin\Release\net7.0-ios\"
-            target="lib\net7.0-ios16.1" />
-        <file src="pjsua2.maui.android\bin\Release\net7.0-android\"
-            target="lib\net7.0-android33.0" />
-        <file src="pjsua2.maui.ios\bin\Release\net7.0-ios\"
-            target="ref\net7.0-ios16.1" />
-        <file src="pjsua2.maui.android\bin\Release\net7.0-android\"
-            target="ref\net7.0-android33.0" /> 
+        <file src="pjsua2.maui.ios\bin\Release\net7.0-ios\*.dll"
+            target="ref\net7.0-ios;runtimes\any\lib\net7.0-ios/" />
+        <file src="pjsua2.maui.android\bin\Release\net7.0-android\*.dll"
+            target="ref\net7.0-android;runtimes\any\lib\net7.0-android" /> 
     </files>
 </package>
 
