@@ -471,7 +471,7 @@ function _build () {
         export CFLAGS="${CFLAGS} -fembed-bitcode"
     fi
 
-    export $IPHONESDK=""
+    export IPHONESDK=""
     if [ $SSL_SUPPORT = true ]; then 
         if [ "$arch" != "i386" ] && [ "$arch" != "x86_64" ]; then
             configure="$configure --with-ssl=${SSL_BUILD_DIR}/bin/iPhoneOS${IOS_SDK_VERSION}-${arch}.sdk"
