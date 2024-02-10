@@ -39,13 +39,7 @@ SDK_DIR_NAME="android-sdk-linux"
 CMD_TOOLS="cmdline-tools"
 CMD_TOOLS_DIR_NAME="latest"
 
-# Check if script is run with sudo privileges
-HAS_PRIVILEGES=$(id -u)
-if [ $HAS_PRIVILEGES -ne 0 ]; then
-  echo "Run as root or with sudo"
-  exit 1
-fi
-
+ 
 # Create Download directory if it does not exist
 if [ ! -d "$DOWNLOAD_DIR" ]; then
   mkdir $DOWNLOAD_DIR
