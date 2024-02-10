@@ -38,10 +38,11 @@ jobs:
           
       - name: install deps
         run: brew install nasm autoconf automake libtool swig
-          
+      - name: Select Xcode 14.3
+        run: sudo xcode-select -s /Applications/Xcode_15.1.app    
       - name: build all ios archs
         run: |   
-          sudo mv /Applications/Xcode_15.1.app /Applications/Xcode.app 
+          sudo ln -s /Applications/Xcode_15.1.app /Applications/Xcode.app 
           sed -i'' -e 's/xamarin/maui/g' ${{ github.workspace }}/pjproject/pjsip-apps/src/swig/csharp/Makefile
           sudo ${{ github.workspace }}/ios/./build --ssl --opus --h264 -a=x86_64,arm64
       
