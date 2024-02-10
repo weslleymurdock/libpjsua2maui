@@ -44,14 +44,14 @@ jobs:
       run: |
         cd ${{ github.workspace }}/android
         sudo ./prepare
-    - name: Build openssl
-      run: |
-        cd ${{ github.workspace }}/android
-        sudo ./openssl
     - name: Build openh264
       run: |
         cd ${{ github.workspace }}/android
         sudo ./openh264
+    - name: Build openssl
+      run: |
+        cd ${{ github.workspace }}/android
+        sudo ./openssl
     - name: Build opus
       run: |
         cd ${{ github.workspace }}/android
