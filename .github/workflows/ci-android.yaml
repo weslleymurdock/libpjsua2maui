@@ -38,7 +38,7 @@ jobs:
         sudo apt-get install -y openjdk-8-jdk
 
         DEPS="unzip git curl bzip2 binutils make autoconf openssl \
-          libssl-dev libopus0 libpcre3 libpcre3-dev build-essential nasm python2 swig linux-libc-dev" 
+          libssl-dev libopus0 libpcre3 libpcre3-dev build-essential nasm python2 swig linux-libc-dev:i386" 
         sudo sh -c "dpkg --add-architecture i386; apt-get update && apt-get -y upgrade && apt-get install -y ${DEPS}"
     - name: Prepare build system
       run: |
