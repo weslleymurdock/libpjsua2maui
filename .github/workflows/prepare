@@ -39,6 +39,12 @@ SDK_DIR_NAME="android-sdk-linux"
 # In earlier version it was "tools"
 CMD_TOOLS="cmdline-tools"
 CMD_TOOLS_DIR_NAME="latest"
+# Android APIs to setup
+SETUP_ANDROID_APIS=("21")
+ANDROID_BUILD_TOOLS="30.0.3"
+
+# Target Android API level
+TARGET_ANDROID_API=21
 
  
 # Create Download directory if it does not exist
