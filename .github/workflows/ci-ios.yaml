@@ -27,7 +27,7 @@ jobs:
     name: build
     steps:
       - name: Setup Xcode
-        uses: maxim-lobanov/setup-xcode@v1
+        uses: maxim-lobanov/setup-xcode@v1.6.0
         with:
           xcode-version: '15.1'
  
@@ -41,8 +41,7 @@ jobs:
           
       - name: build all ios archs
         run: |   
-          sudo ln -s /Applications/Xcode_15.1.app /Applications/Xcode.app
-          sudo ln -s /Applications/Xcode.app /Applications/Xcode_15.0.1.app 
+          sudo mv /Applications/Xcode_15.1.app /Applications/Xcode.app 
           sed -i'' -e 's/xamarin/maui/g' ${{ github.workspace }}/pjproject/pjsip-apps/src/swig/csharp/Makefile
           sudo ${{ github.workspace }}/ios/./build --ssl --opus --h264 -a=x86_64,arm64
       
