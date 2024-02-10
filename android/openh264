@@ -4,7 +4,7 @@ set -e
 
 # Source variables from config.conf file
 . config.conf
-
+BASEDIR=/home/runner/work/pjsua2maui/pjsua2maui
 
 ##############################################################################
 ############################      FUNCTIONS     ##############################
