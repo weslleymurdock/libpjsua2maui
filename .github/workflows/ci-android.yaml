@@ -39,12 +39,9 @@ jobs:
     - name: Prepare Environment
       uses: airvzxf/cache-anything-new-action@v1.0
       with:
-        script: 'install.sh'
+        script: 'prepare'
         is_cached: ${{ steps.cache-packages.outputs.cache-hit }}
         cache: ${{ runner.temp }}/cache-linux
-      run: |
-        cd ${{ github.workspace }}/android
-        sudo ./prepare
     - name: Build openh264
       run: |
         cd ${{ github.workspace }}/android
