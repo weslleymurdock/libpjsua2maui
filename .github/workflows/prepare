@@ -1,4 +1,5 @@
 #!/bin/bash -e
+BASEDIR=/home/runner/work/pjsua2maui/pjsua2maui
 
 # TOOLS AND LIBRARIES DOWNLOAD DIRECTORY - add to gitignore too
 DOWNLOAD_DIR="$BASEDIR/android/tools"
