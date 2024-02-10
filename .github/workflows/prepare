@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-. config.conf
+. ../../android/config.conf
 
 # Check if script is run with sudo privileges
 HAS_PRIVILEGES=$(id -u)
