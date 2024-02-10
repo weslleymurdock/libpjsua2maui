@@ -71,7 +71,8 @@ function finalizeArgs {
 ##############################################################################
 ############################        INIT          ############################
 ##############################################################################
-
+echo "Modifying platform-android.mk to skip Encdemo and Decdemo builds"
+sed -e "/binaries: decdemo encdemo/ s/^#*/#/" -i ${OPENH264_DIR_NAME}/build/platform-android.mk
 # Initial variables setup
 initialSetup
 # Set final paths and exports
