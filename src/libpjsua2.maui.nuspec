@@ -91,9 +91,9 @@
             target="build\native\android-x86_64\libc++_shared.so" />
 
         <file src="libpjsua2.so\org\pjsip\*.java" target="content" />
-        <file src="pjsua2.maui.ios\bin\Release\net7.0-ios\*.dll"
+        <file src="pjsua2.maui.ios\bin\Release\net7.0-ios\"
             target="ref\net7.0-ios;runtimes\any\lib\net7.0-ios/" />
-        <file src="pjsua2.maui.android\bin\Release\net7.0-android\*.dll"
+        <file src="pjsua2.maui.android\bin\Release\net7.0-android\"
             target="ref\net7.0-android;runtimes\any\lib\net7.0-android" /> 
     </files>
 </package>
