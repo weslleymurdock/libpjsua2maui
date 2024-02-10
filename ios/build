@@ -471,18 +471,18 @@ function _build () {
         export CFLAGS="${CFLAGS} -fembed-bitcode"
     fi
 
-    export IPHONESDK=""
+   #export IPHONESDK=""
     if [ $SSL_SUPPORT = true ]; then 
         if [ "$arch" != "i386" ] && [ "$arch" != "x86_64" ]; then
             configure="$configure --with-ssl=${SSL_BUILD_DIR}/bin/iPhoneOS${IOS_SDK_VERSION}-${arch}.sdk"
             export CFLAGS="${CFLAGS} -I${SSL_BUILD_DIR}/bin/iPhoneOS${IOS_SDK_VERSION}-${arch}.sdk/include"
             export LDFLAGS="${LDFLAGS} -L${SSL_BUILD_DIR}/bin/iPhoneOS${IOS_SDK_VERSION}-${arch}.sdk/lib"
-            export IPHONESDK="iPhoneOS${IOS_SDK_VERSION}-${arch}.sdk"
+        #    export IPHONESDK="iPhoneOS${IOS_SDK_VERSION}-${arch}.sdk"
         else
             configure="$configure --with-ssl=${SSL_BUILD_DIR}/bin/iPhoneSimulator${IOS_SDK_VERSION}-${arch}.sdk"
             export CFLAGS="${CFLAGS} -I${SSL_BUILD_DIR}/bin/iPhoneSimulator${IOS_SDK_VERSION}-${arch}.sdk/include"
             export LDFLAGS="${LDFLAGS} -L${SSL_BUILD_DIR}/bin/iPhoneSimulator${IOS_SDK_VERSION}-${arch}.sdk/lib"
-            export IPHONESDK="iPhoneSimulator${IOS_SDK_VERSION}-${arch}.sdk"
+          #  export IPHONESDK="iPhoneSimulator${IOS_SDK_VERSION}-${arch}.sdk"
         fi
     fi
 
