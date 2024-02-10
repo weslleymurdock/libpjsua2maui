@@ -83,7 +83,7 @@ clearBuildDirectory
 ##############################################################################
 ############################        MAIN          ############################
 ##############################################################################
-cd "${BASE_DIR}/third_party/openh264"
+cd "../third_party/openh264"
 for arch in "${TARGET_ARCHS[@]}"
 do
     echo "Building OpenH264 for target arch $arch ..."
