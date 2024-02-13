@@ -26,18 +26,7 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <license type="expression">LGPL-3.0-or-later</license>
         <copyright>Copyright ©2024 Onboard Code Corporation</copyright>
-        <tags>sip voip pjsip pjlib pjsua pjsua2 libpjsua2 pjproject pjsua2maui maui net native</tags>
-        <references>
-            <group targetFramework="net7.0-android33.0">
-                <reference file="pjsua2.maui.android.dll" />
-                <reference file="pjsua2.maui.android.pdb" />
-            </group>
-            <group targetFramework="net7.0-ios16.1">
-                <reference file="pjsua2.maui.ios.dll" />
-                <reference file="pjsua2.maui.ios.pdb" />
-            </group>
-        </references>
-        
+        <tags>sip voip pjsip pjlib pjsua pjsua2 libpjsua2 pjproject pjsua2maui maui net native</tags>        
         <dependencies>
             <group targetFramework="net7.0-android33.0" />
             <group targetFramework="net7.0-ios16.1" />
