@@ -97,6 +97,11 @@ jobs:
         echo "# Install dependencies packages"
         sudo apt install -y ${DEPS}
         
+
+        echo "# --------------------------------------------------------"
+        echo "# check java"
+        java -version
+
         echo "# --------------------------------------------------------"
         echo "# Install android NDK"
         mkdir -p ${{ github.workspace }}/android/tools && cd ${{ github.workspace }}/android/tools
