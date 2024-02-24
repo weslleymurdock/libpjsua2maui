@@ -45,8 +45,8 @@ jobs:
         DEPS: unzip git curl bzip2 binutils make autoconf openssl libssl-dev libopus0 libpcre3 libpcre3-dev build-essential nasm python3 swig linux-libc-dev:i386
         NDK_DOWNLOAD_URL: https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip
         TARGET_ANDROID_API: 21 
-        ANDROID_BUILD_TOOLS: "33.0.2"
-        CMD_TOOLS_DOWNLOAD_URL: https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        ANDROID_BUILD_TOOLS: "30.0.3"
+        CMD_TOOLS_DOWNLOAD_URL: https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
         OPUS_URL: https://downloads.xiph.org/releases/opus/opus-1.4.tar.gz
         OPENSSL_URL: https://www.openssl.org/source/openssl-1.1.1v.tar.gz
       run: |
