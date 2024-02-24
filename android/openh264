@@ -4,7 +4,7 @@ set -e
 
 # Source variables from config.conf file
 . config.conf
-BASEDIR=/home/runner/work/pjsua2maui/pjsua2maui
+
 
 ##############################################################################
 ############################      FUNCTIONS     ##############################
@@ -13,7 +13,7 @@ BASEDIR=/home/runner/work/pjsua2maui/pjsua2maui
 function initialSetup {
     NDK_PATH="$DOWNLOAD_DIR/$NDK_DIR_NAME"
     SDK_TOOLS_PATH="$DOWNLOAD_DIR/${SDK_DIR_NAME}"/tools
-    OPENH264_SRC_PATH="${BASEDIR}/third_party/openh264"
+    OPENH264_SRC_PATH="$DOWNLOAD_DIR/${OPENH264_DIR_NAME}"
     OPENH264_TMP_DIR="/tmp/openh264"
 }
 
@@ -71,12 +71,9 @@ function finalizeArgs {
 ##############################################################################
 ############################        INIT          ############################
 ##############################################################################
+
 # Initial variables setup
 initialSetup
-
-echo "Modifying platform-android.mk to skip Encdemo and Decdemo builds"
-sed -e "/binaries: decdemo encdemo/ s/^#*/#/" -i ${OPENH264_SRC_PATH}/build/platform-android.mk
-
 # Set final paths and exports
 setupPathsAndExports
 # Clear and recreate the build output directory
@@ -86,7 +83,7 @@ clearBuildDirectory
 ##############################################################################
 ############################        MAIN          ############################
 ##############################################################################
-cd "../third_party/openh264"
+
 for arch in "${TARGET_ARCHS[@]}"
 do
     echo "Building OpenH264 for target arch $arch ..."
@@ -96,14 +93,14 @@ do
     #change default output DIR for make install
     sed -i "s*PREFIX=/usr/local*PREFIX=${LIB_PATH}/${arch}*g" Makefile
     
-    ARGS="APP_STL=c++_shared APP_PLATFORM=android-${TARGET_ANDROID_API} OS=android NDKROOT=${NDK_PATH} NDK_TOOLCHAIN_VERSION=clang NDKLEVEL=${OPENH264_TARGET_NDK_LEVEL} "
+    ARGS="APP_PLATFORM=android-${TARGET_ANDROID_API} OS=android NDKROOT=${NDK_PATH} NDK_TOOLCHAIN_VERSION=clang NDKLEVEL=${OPENH264_TARGET_NDK_LEVEL} "
     ARGS="${ARGS}TARGET=android-${TARGET_ANDROID_API} ARCH="
     # Add final architecture dependent info
     finalizeArgs $arch
 
-    make ${ARGS} #>> "${LOG_PATH}/${arch}.log" 2>&1
+    make ${ARGS} >> "${LOG_PATH}/${arch}.log" 2>&1
     mkdir -p ${LIB_PATH}/${arch}
-    make ${ARGS} install #>> "${LOG_PATH}/${arch}.log" 2>&1
+    make ${ARGS} install >> "${LOG_PATH}/${arch}.log" 2>&1
 done
 
 echo "Finished building OpenH264! Check output folder: ${OPENH264_BUILD_OUT_PATH}"

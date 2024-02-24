@@ -119,9 +119,9 @@ do
     cp libcrypto.so $OUTPUT_LIB 
     
 
-    mkdir -p "/home/runner/libpjsua2/lib/${arch}"
-    cp libssl.so "/home/runner/libpjsua2/lib/${arch}"
-    cp libcrypto.so "/home/runner/libpjsua2/lib/${arch}"
+    mkdir -p "/home/runner/work/pjsua2maui/pjsua2maui/android/lib/${arch}"
+    cp libssl.so "/home/runner/work/pjsua2maui/pjsua2maui/android/lib/${arch}"
+    cp libcrypto.so "/home/runner/work/pjsua2maui/pjsua2maui/android/lib/${arch}"
     echo "Build completed! Check output libraries in ${OPENSSL_OUTPUT_PATH}"
 done
 
