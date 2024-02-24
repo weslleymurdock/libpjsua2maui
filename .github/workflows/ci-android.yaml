@@ -92,7 +92,7 @@ jobs:
         echo "# --------------------------------------------------------"
         echo "# Install java jdk"
         sudo sh -c "dpkg --add-architecture i386; apt-get update && apt-get -y upgrade"
-        sudo apt-get install -y openjdk-21-jdk
+        sudo apt-get install -y openjdk-8-jdk
         echo "# --------------------------------------------------------"
         echo "# Install dependencies packages"
         sudo apt install -y ${DEPS}
