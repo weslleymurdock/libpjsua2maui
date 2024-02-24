@@ -137,9 +137,9 @@ jobs:
         echo "#### Download openh264"
         cd ${{ github.workspace }}/android/tools/
         curl -L -# -o openh264.tar.gz "$OPENH264_URL" 2>&1
-        rm -rf openh264 
+        rm -rf openh264-openh264v2.1.0 
         tar xzf openh264.tar.gz && rm -rf openh264.tar.gz 
-        sed -e "/binaries: decdemo encdemo/ s/^#*/#/" -i openh264/build/platform-android.mk
+        sed -e "/binaries: decdemo encdemo/ s/^#*/#/" -i ${{ github.workspace }}/android/tools/openh264-openh264v2.1.0/build/platform-android.mk
         echo "#### Download opus"
         cd ${{ github.workspace }}/android/tools/
         curl -L -# -o opus.tar.gz "$OPUS_URL" 2>&1
