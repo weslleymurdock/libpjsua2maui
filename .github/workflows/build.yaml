@@ -22,7 +22,12 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
 
 jobs:
-  build:
+  call-android-workflow:
+    uses: ./.github/workflows/ci-android.yaml
+  call-ios-workflow:
+    uses: ./.github/workflows/ci-ios.yaml
+  build: 
+    needs: [ call-android-workflow, call-ios-workflow ]
     runs-on: macos-13
     name: build
     steps:
