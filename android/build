@@ -197,9 +197,7 @@ function buildPjSip {
 function copyPjsuaBindings {
     echo "Copying PJSUA2 java and csharp bindings to final build directory ..."
     
-    mkdir -p "${FINAL}/java"
-
-    cp -r -v "${PJSUA_GENERATED_JAVA_SRC_DIR}" "${FINAL}/java"
+    cp -r -v "${PJSUA_GENERATED_JAVA_SRC_DIR}" "${FINAL}"
     
     if [ -d ${PJSUA_GENERATED_CSHARP_DIR}/ ]; then
         echo "Copying c# sources to final build directory ..."
