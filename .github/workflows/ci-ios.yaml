@@ -1,0 +1,54 @@
+name: Build native libraries for iOS
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+    
+  pull_request:
+    types: [opened, synchronize, reopened]  
+  
+  workflow_dispatch:
+
+  workflow_call:
+
+permissions:
+  contents:   write 
+
+env:
+  DOTNET_NOLOGO: true                     # Disable the .NET logo
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
+
+jobs:
+  build:
+    runs-on: macos-13
+    name: build
+    steps:
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1.6.0
+        with:
+          xcode-version: '15.1'
+ 
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          
+      - name: install deps
+        run: brew install nasm autoconf automake libtool swig
+      - name: Select Xcode 15.1
+        run: sudo xcode-select -s /Applications/Xcode_15.1.app    
+      - name: build all ios archs
+        run: |   
+          sudo ln -s /Applications/Xcode_15.1.app /Applications/Xcode.app 
+          sed -i'' -e 's/xamarin/maui/g' ${{ github.workspace }}/pjproject/pjsip-apps/src/swig/csharp/Makefile
+          sudo ${{ github.workspace }}/ios/./build --ssl --opus --h264 -a=x86_64,arm64
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: libpjsua2.a
+          path: ${{ github.workspace }}/pjsua2maui

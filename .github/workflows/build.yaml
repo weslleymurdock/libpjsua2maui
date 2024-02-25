@@ -13,16 +13,23 @@ on:
   
   workflow_dispatch:
 
+  workflow_call:
+
 permissions:
-  contents: read
+  contents: write
 
 env:
   DOTNET_NOLOGO: true                     # Disable the .NET logo
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
   DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
-
+  PACKAGE_VERSION: '1.2.14.20'
 jobs:
-  build:
+  call-android-workflow:
+    uses: ./.github/workflows/ci-android.yaml
+  call-ios-workflow:
+    uses: ./.github/workflows/ci-ios.yaml
+  build: 
+    needs: [ call-android-workflow, call-ios-workflow ]
     runs-on: macos-13
     name: build
     steps:
@@ -47,26 +54,33 @@ jobs:
         with:
           distribution: 'microsoft'
           java-version: '11'
-         
-      - name: Download Android & iOS Artifacts
-        run: |
-          echo "Android ..."
-          curl -L -o ./libpjsua2.maui.so.tar.gz https://github.com/weslleymurdock/libpjsua2-android/releases/download/v1.0.0/libpjsua2.tar.gz
-          tar -xzvf libpjsua2.maui.so.tar.gz 
+      - uses: actions/download-artifact@v4
+      - name: Download Artifacts
+        run: ls -R
+      
+      - name: Setup Android & iOS Artifacts
+        run: | 
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/org/pjsip
           mkdir -p ${{ github.workspace }}/src/pjsua2.maui.android/pjsua2
-          mkdir -p ${{ github.workspace }}/src/libpjsua2.so/lib/
-          mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/libpjsua2.maui.android/* ${{ github.workspace }}/src/pjsua2.maui.android/pjsua2
-          rm -rf ${{ github.workspace }}/home/runner/libpjsua2/lib/java/org/pjsip/pjsua2
-          mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/java/org/pjsip/* ${{ github.workspace }}/src/libpjsua2.so/org/pjsip/
-          mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/* ${{ github.workspace }}/src/libpjsua2.so/lib/
-          echo "iOS ..."
-          curl -L -o ./libpjsua2.maui.a.tar.gz https://github.com/weslleymurdock/libpjsua2-ios/releases/download/v1.0.0/libpjsua2.tar.gz
-          tar -xzvf libpjsua2.maui.a.tar.gz
+          mkdir -p ${{ github.workspace }}/src/libpjsua2.so/lib/arm64-v8a
+          mkdir -p ${{ github.workspace }}/src/libpjsua2.so/lib/armeabi-v7a
+          mkdir -p ${{ github.workspace }}/src/libpjsua2.so/lib/x86
+          mkdir -p ${{ github.workspace }}/src/libpjsua2.so/lib/x86_64
+          mkdir -p ${{ github.workspace }}/src/libpjsua2.so/org/pjsip
+          mv -v ${{ github.workspace }}/libpjsua2.so/libpjsua2.maui.android/* ${{ github.workspace }}/src/pjsua2.maui.android/pjsua2
+          rm -rf ${{ github.workspace }}/libpjsua2.so/java/org/pjsip/pjsua2
+          mv -v ${{ github.workspace }}/libpjsua2.so/java/org/pjsip/*.java ${{ github.workspace }}/src/libpjsua2.so/org/pjsip/
+          mv -v ${{ github.workspace }}/libpjsua2.so/arm64-v8a/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/arm64-v8a/
+          mv -v ${{ github.workspace }}/libpjsua2.so/armeabi-v7a/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/armeabi-v7a/
+          mv -v ${{ github.workspace }}/libpjsua2.so/x86/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/x86/
+          mv -v ${{ github.workspace }}/libpjsua2.so/x86_64/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/x86_64/
+          
           mkdir -p ${{ github.workspace }}/src/pjsua2.maui.ios/pjsua2
-          mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/
-          mv -v ${{ github.workspace }}/libpjsua2/lib/pjsua2maui/pjsua2/* ${{ github.workspace }}/src/pjsua2.maui.ios/pjsua2
-          mv -v ${{ github.workspace }}/libpjsua2/lib/* ${{ github.workspace }}/src/libpjsua2.a/lib/
+          mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/arm64
+          mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/x86_64
+          mv -v ${{ github.workspace }}/libpjsua2.a/pjsua2* ${{ github.workspace }}/src/pjsua2.maui.ios/pjsua2
+          mv -v ${{ github.workspace }}/libpjsua2.a/lib/arm64/*.a ${{ github.workspace }}/src/libpjsua2.a/lib/arm64
+          mv -v ${{ github.workspace }}/libpjsua2.a/lib/x86_64/*.a ${{ github.workspace }}/src/libpjsua2.a/lib/x86_64
 
       - name: Restore Dependencies
         run: | 
@@ -83,3 +97,8 @@ jobs:
         run: |
           cd ${{ github.workspace }}/src
           ./pack.sh
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: ${{ github.workspace }}/src/libpjsua2.maui.${{ env.PACKAGE_VERSION }}.nupkg

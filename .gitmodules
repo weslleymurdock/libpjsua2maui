@@ -1,0 +1,20 @@
+[submodule "pjproject"]
+	path = pjproject
+	url = https://github.com/pjsip/pjproject.git
+	branch = main
+[submodule "third_party/opus"]
+	path = third_party/opus
+	url = https://github.com/xiph/opus.git
+	branch = main
+[submodule "third_party/openh264"]
+	path = third_party/openh264
+	url = https://github.com/cisco/openh264.git
+	branch = master
+[submodule "third_party/openssl"]
+	path = third_party/openssl
+	url = https://github.com/openssl/openssl.git
+	branch = master
+[submodule "third_party/OpenSSL-for-iPhone"]
+	path = third_party/OpenSSL-for-iPhone
+	url = https://github.com/x2on/OpenSSL-for-iPhone.git
+	branch = master

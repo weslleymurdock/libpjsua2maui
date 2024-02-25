@@ -1,0 +1,122 @@
+name: Build native libraries for Android
+
+on:    
+  pull_request:
+    types: [opened, synchronize, reopened]  
+  
+  workflow_dispatch:
+
+  workflow_call:
+
+permissions:
+  contents:   write  
+
+env:
+  DOTNET_NOLOGO: true                     # Disable the .NET logo
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
+  OPENH264_URL: https://github.com/cisco/openh264/archive/openh264v2.1.0.tar.gz
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+     
+    - name: Download libs and Install packages 
+      env: 
+        DEPS: unzip git curl bzip2 binutils make autoconf openssl libssl-dev libopus0 libpcre3 libpcre3-dev build-essential nasm python3 swig linux-libc-dev:i386
+        NDK_DOWNLOAD_URL: https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip
+        TARGET_ANDROID_API: 21 
+        ANDROID_BUILD_TOOLS: "30.0.3"
+        CMD_TOOLS_DOWNLOAD_URL: https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+        OPUS_URL: https://downloads.xiph.org/releases/opus/opus-1.4.tar.gz
+        OPENSSL_URL: https://www.openssl.org/source/openssl-1.1.1v.tar.gz
+      run: |
+        set +xv   
+        echo "# --------------------------------------------------------"
+        echo "# Install java jdk"
+        sudo sh -c "dpkg --add-architecture i386; apt-get update && apt-get -y upgrade"
+        sudo apt-get install -y openjdk-8-jdk
+        echo "# --------------------------------------------------------"
+        echo "# Install dependencies packages"
+        sudo apt install -y ${DEPS}
+         
+        echo "# --------------------------------------------------------"
+        echo "# Install android NDK"
+        mkdir -p ${{ github.workspace }}/android/tools && cd ${{ github.workspace }}/android/tools
+        curl -L -# -o ndk.zip "$NDK_DOWNLOAD_URL" 2>&1
+        rm -rf ${{ github.workspace }}/android/tools/android-ndk-r21e
+        unzip ndk.zip -d ndk
+        mv ${{ github.workspace }}/android/tools/ndk/android-ndk-r21e .
+        rm -rf ${{ github.workspace }}/android/tools/ndk
+        rm -rf ${{ github.workspace }}/android/tools/ndk.zip
+        
+        echo "# --------------------------------------------------------"
+        echo "# Install Android Command Line Tools, Platforms and PlatformTools"
+        cd ${{ github.workspace }}/android/tools
+        curl -L -# -o cmdline-tools.zip "$CMD_TOOLS_DOWNLOAD_URL" 2>&1
+        rm -rf ${{ github.workspace }}/android/tools/android-sdk-linux
+        unzip -d ${{ github.workspace }}/android/tools/android-sdk-linux cmdline-tools.zip
+        rm -rf ${{ github.workspace }}/android/tools/cmdline-tools.zip
+        mkdir -p ~/.android
+        touch ~/.android/repositories.cfg
+        
+        cd ${{ github.workspace }}/android/tools/android-sdk-linux/cmdline-tools
+        mkdir -p latest
+        mv $(ls | grep -w -v latest) ${{ github.workspace }}/android/tools/android-sdk-linux/cmdline-tools/latest
+        export ANDROID_HOME=${{ github.workspace }}/android/tools/android-sdk-linux/
+        export SDK_MANAGER=$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
+        echo yes | $SDK_MANAGER "platforms;android-$TARGET_ANDROID_API"
+        echo yes | $SDK_MANAGER "platform-tools"
+        export PATH=$ANDROID_HOME/platform-tools/:$ANDROID_HOME/tools:$PATH
+        echo yes | $SDK_MANAGER "build-tools;$ANDROID_BUILD_TOOLS"
+
+        echo "# --------------------------------------------------------"
+        echo "# Download third party libs"
+        echo "#### Download openh264"
+        cd ${{ github.workspace }}/android/tools/
+        curl -L -# -o openh264.tar.gz "$OPENH264_URL" 2>&1
+        rm -rf openh264-openh264v2.1.0 
+        tar xzf openh264.tar.gz && rm -rf openh264.tar.gz 
+        sed -e "/binaries: decdemo encdemo/ s/^#*/#/" -i ${{ github.workspace }}/android/tools/openh264-openh264v2.1.0/build/platform-android.mk
+        echo "#### Download opus"
+        cd ${{ github.workspace }}/android/tools/
+        curl -L -# -o opus.tar.gz "$OPUS_URL" 2>&1
+        rm -rf opus-1.4
+        tar xzf opus.tar.gz && rm -rf opus.tar.gz
+
+        echo "#### Download openssl"
+        cd ${{ github.workspace }}/android/tools/
+        rm -rf openssl
+        curl -L -# -o openssl.tar.gz "$OPENSSL_URL" 2>&1
+        tar xzf openssl.tar.gz && rm -rf openssl.tar.gz 
+
+    - name: Build openh264
+      run: |  
+        cd ${{ github.workspace }}/android
+        sudo ./openh264
+  
+    - name: Build openssl
+      run: |
+        cd ${{ github.workspace }}/android
+        sudo ./openssl
+    - name: Build opus
+      run: |
+        cd ${{ github.workspace }}/android
+        sudo ./opus
+    - name: Build pjsua2
+      run: |
+        cd ${{ github.workspace }}/android
+        sudo ./build
+    - name: Finalize
+      run : |
+        echo "done building"
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: libpjsua2.so
+        path: ${{ github.workspace }}/android/lib

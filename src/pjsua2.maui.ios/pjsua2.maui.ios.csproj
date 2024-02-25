@@ -7,6 +7,8 @@
 		<RootNamespace>pjsua2maui.pjsua2</RootNamespace>
 		<AssemblyName>pjsua2.maui.ios</AssemblyName>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<ProduceReferenceAssemblies>True</ProduceReferenceAssemblies>
+		<CopyRefAssembliesToPublishDirectory>True</CopyRefAssembliesToPublishDirectory>
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageId>libpjsua2.maui.ios</PackageId>
