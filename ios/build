@@ -195,7 +195,7 @@ function build_h264 () {
         h264_prefix="${H264_BUILD_DIR}/builds/${arch}"
         h264_log="${h264_prefix}/build.log"
         mkdir -p "${h264_prefix}/logs"
-
+        mkdir -p "${BASE_DIR}/lib/${arch}/"
         pushd . > /dev/null
   
         echo "Building h264 for ${arch}"
@@ -212,7 +212,7 @@ function build_h264 () {
         make OS=ios ARCH=${arch} SDK_MIN=${MIN_IOS_VERSION} v=No clean >> "${h264_log}" || exit
         mv "${h264_makefile_bak}" "${h264_makefile}"
         popd > /dev/null
-        h264_lipo_args="${h264_lipo_args} -arch ${arch} ${H264_BUILD_DIR}/builds/${arch}/lib/libopenh264.a"
+        cp -v "${H264_BUILD_DIR}/builds/${arch}/lib/libopenh264.a" "${BASE_DIR}/lib/${arch}/"
     done
     echo "Done compiling openh264"
 }
@@ -495,7 +495,7 @@ function _build () {
     fi
 
     if [ $H264_SUPPORT = true ]; then
-        configure="$configure --with-openh264=${H264_BUILD_DIR}"
+        configure="$configure --with-openh264=${H264_BUILD_DIR}/builds/${arch}"
         export CFLAGS="${CFLAGS} -I${H264_BUILD_DIR}/builds/$arch/include"
         export LDFLAGS="${LDFLAGS} -L${H264_BUILD_DIR}/builds/$arch/lib"
     fi

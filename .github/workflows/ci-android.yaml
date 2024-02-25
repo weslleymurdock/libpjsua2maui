@@ -216,5 +216,5 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: lipjsua2.so
-        path: /home/runner/work/pjsua2maui/pjsua2maui/android/lib
+        name: libpjsua2.so
+        path: ${{ github.workspace }}/android/lib
