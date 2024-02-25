@@ -65,20 +65,20 @@ jobs:
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/lib/x86
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/lib/x86_64
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/org/pjsip
-          mv -v ${{ github.workspace }}/libpjsua2.maui.android/* ${{ github.workspace }}/src/pjsua2.maui.android/pjsua2
-          rm -rf ${{ github.workspace }}/java/org/pjsip/pjsua2
-          mv -v ${{ github.workspace }}/java/org/pjsip/*.java ${{ github.workspace }}/src/libpjsua2.so/org/pjsip/
-          mv -v ${{ github.workspace }}/arm64-v8a/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/arm64-v8a/
-          mv -v ${{ github.workspace }}/armeabi-v7a/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/armeabi-v7a/
-          mv -v ${{ github.workspace }}/x86/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/x86/
-          mv -v ${{ github.workspace }}/x86_64/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/x86_64/
+          mv -v ${{ github.workspace }}/libpjsua2.so/libpjsua2.maui.android/* ${{ github.workspace }}/src/pjsua2.maui.android/pjsua2
+          rm -rf ${{ github.workspace }}/libpjsua2.so/java/org/pjsip/pjsua2
+          mv -v ${{ github.workspace }}/libpjsua2.so/java/org/pjsip/*.java ${{ github.workspace }}/src/libpjsua2.so/org/pjsip/
+          mv -v ${{ github.workspace }}/libpjsua2.so/arm64-v8a/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/arm64-v8a/
+          mv -v ${{ github.workspace }}/libpjsua2.so/armeabi-v7a/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/armeabi-v7a/
+          mv -v ${{ github.workspace }}/libpjsua2.so/x86/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/x86/
+          mv -v ${{ github.workspace }}/libpjsua2.so/x86_64/*.so ${{ github.workspace }}/src/libpjsua2.so/lib/x86_64/
           
           mkdir -p ${{ github.workspace }}/src/pjsua2.maui.ios/pjsua2
           mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/arm64
           mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/x86_64
-          mv -v ${{ github.workspace }}/pjsua2/* ${{ github.workspace }}/src/pjsua2.maui.ios/pjsua2
-          mv -v ${{ github.workspace }}/lib/arm64/*.a ${{ github.workspace }}/src/libpjsua2.a/lib/arm64
-          mv -v ${{ github.workspace }}/lib/x86_64/*.a ${{ github.workspace }}/src/libpjsua2.a/lib/x86_64
+          mv -v ${{ github.workspace }}/libpjsua2.a/pjsua2* ${{ github.workspace }}/src/pjsua2.maui.ios/pjsua2
+          mv -v ${{ github.workspace }}/libpjsua2.a/lib/arm64/*.a ${{ github.workspace }}/src/libpjsua2.a/lib/arm64
+          mv -v ${{ github.workspace }}/libpjsua2.a/lib/x86_64/*.a ${{ github.workspace }}/src/libpjsua2.a/lib/x86_64
 
       - name: Restore Dependencies
         run: | 
