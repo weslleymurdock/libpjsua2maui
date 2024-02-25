@@ -25,18 +25,9 @@ jobs:
       uses: actions/checkout@v3
       with:
         submodules: recursive
-    
-    - name : Cache
-      uses: actions/cache@v2
-      id: cache-packages
-      with:
-        path: ${{ runner.temp }}/cache-linux
-        key: ${{ runner.os }}-cache-packages-v2.1
-
-    - name: Download libs and Install packages
-      if: steps.cache-packages.outputs.cache-hit != 'true'
-      env:
-        SOURCE: ${{ runner.temp }}/cache-linux
+     
+    - name: Download libs and Install packages 
+      env: 
         DEPS: unzip git curl bzip2 binutils make autoconf openssl libssl-dev libopus0 libpcre3 libpcre3-dev build-essential nasm python3 swig linux-libc-dev:i386
         NDK_DOWNLOAD_URL: https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip
         TARGET_ANDROID_API: 21 
@@ -45,45 +36,7 @@ jobs:
         OPUS_URL: https://downloads.xiph.org/releases/opus/opus-1.4.tar.gz
         OPENSSL_URL: https://www.openssl.org/source/openssl-1.1.1v.tar.gz
       run: |
-        set +xv
-        echo "# --------------------------------------------------------"
-        echo "# Action environment variables"
-        echo "github.workspace: ${{ github.workspace }}" 
-        echo "runner.os: ${{ runner.os }}"
-        echo "runner.temp: ${{ runner.temp }}"
-        echo "# --------------------------------------------------------"
-        echo "# Where am I?"
-        pwd
-        echo "SOURCE: ${SOURCE}"
-        ls -lha /
-        sudo du -h -d 1 / 2> /dev/null || true
-        echo "# --------------------------------------------------------"
-        echo "# apt-get update"
-        sudo apt-get update
-        echo "# --------------------------------------------------------"
-        echo "# Set up snapshot"
-        mkdir -p "${{ runner.temp }}"/snapshots/
-        
-        sudo rm -f /var/lib/apt/lists/lock
-         
-        echo "# --------------------------------------------------------"
-        echo "# Take first snapshot"
-        sudo find / \
-              -type f,l \
-              -not \( -path "/sys*" -prune \) \
-              -not \( -path "/proc*" -prune \) \
-              -not \( -path "/mnt*" -prune \) \
-              -not \( -path "/dev*" -prune \) \
-              -not \( -path "/run*" -prune \) \
-              -not \( -path "/etc/mtab*" -prune \) \
-              -not \( -path "/var/cache/apt/archives*" -prune \) \
-              -not \( -path "/tmp*" -prune \) \
-              -not \( -path "/var/tmp*" -prune \) \
-              -not \( -path "/var/backups*" \) \
-              -not \( -path "/boot*" -prune \) \
-              -not \( -path "/vmlinuz*" -prune \) \
-              > "${{ runner.temp }}"/snapshots/snapshot_01.txt 2> /dev/null \
-              || true
+        set +xv   
         echo "# --------------------------------------------------------"
         echo "# Install java jdk"
         sudo sh -c "dpkg --add-architecture i386; apt-get update && apt-get -y upgrade"
@@ -91,12 +44,7 @@ jobs:
         echo "# --------------------------------------------------------"
         echo "# Install dependencies packages"
         sudo apt install -y ${DEPS}
-        
-
-        echo "# --------------------------------------------------------"
-        echo "# check java"
-        java -version
-
+         
         echo "# --------------------------------------------------------"
         echo "# Install android NDK"
         mkdir -p ${{ github.workspace }}/android/tools && cd ${{ github.workspace }}/android/tools
@@ -145,48 +93,7 @@ jobs:
         cd ${{ github.workspace }}/android/tools/
         rm -rf openssl
         curl -L -# -o openssl.tar.gz "$OPENSSL_URL" 2>&1
-        tar xzf openssl.tar.gz && rm -rf openssl.tar.gz
-
-        echo "# --------------------------------------------------------"
-        echo "# Take second snapshot"
-        sudo find / \
-              -type f,l \
-              -not \( -path "/sys*" -prune \) \
-              -not \( -path "/proc*" -prune \) \
-              -not \( -path "/mnt*" -prune \) \
-              -not \( -path "/dev*" -prune \) \
-              -not \( -path "/run*" -prune \) \
-              -not \( -path "/etc/mtab*" -prune \) \
-              -not \( -path "/var/cache/apt/archives*" -prune \) \
-              -not \( -path "/tmp*" -prune \) \
-              -not \( -path "/var/tmp*" -prune \) \
-              -not \( -path "/var/backups*" \) \
-              -not \( -path "/boot*" -prune \) \
-              -not \( -path "/vmlinuz*" -prune \) \
-              > "${{ runner.temp }}"/snapshots/snapshot_02.txt 2> /dev/null \
-              || true
-        echo "# --------------------------------------------------------"
-        echo "# Filter new files"
-        diff -C 1 \
-            --color=always \
-            "${{ runner.temp }}"/snapshots/snapshot_01.txt "${{ runner.temp }}"/snapshots/snapshot_02.txt \
-            | grep -E "^\+" \
-            | sed -E s/..// \
-            > "${{ runner.temp }}"/snapshots/snapshot_new_files.txt
-        < "${{ runner.temp }}"/snapshots/snapshot_new_files.txt wc -l
-        ls -lha "${{ runner.temp }}"/snapshots/
-        echo "# --------------------------------------------------------"
-        echo "# Make cache directory"
-        rm -fR "${SOURCE}"
-        mkdir -p "${SOURCE}"
-        while IFS= read -r LINE
-        do
-          sudo cp -a --parent "${LINE}" "${SOURCE}"
-        done < "${{ runner.temp }}"/snapshots/snapshot_new_files.txt
-        ls -lha "${SOURCE}"
-        echo ""
-        sudo du -sh "${SOURCE}" || true
-        echo "# --------------------------------------------------------"
+        tar xzf openssl.tar.gz && rm -rf openssl.tar.gz 
 
     - name: Build openh264
       run: |  
@@ -209,7 +116,7 @@ jobs:
       run : |
         echo "done building"
     - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: libpjsua2.so
         path: ${{ github.workspace }}/android/lib
