@@ -46,7 +46,7 @@ jobs:
           sed -i'' -e 's/xamarin/maui/g' ${{ github.workspace }}/pjproject/pjsip-apps/src/swig/csharp/Makefile
           sudo ${{ github.workspace }}/ios/./build --ssl --opus --h264 -a=x86_64,arm64
       - name: Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: libpjsua2.a
-          path: ${{ github.workspace }}/ios/libpjsua2
+          path: ${{ github.workspace }}/pjsua2maui

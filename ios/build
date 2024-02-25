@@ -552,16 +552,16 @@ function _collect () {
         cp -v "$PJSIP_SRC_DIR/pjsip-apps/src/swig/csharp/pjsua2maui/pjsua2maui.iOS/lib/$1/libpjsua2.a" $BASE_DIR/lib/$1
     fi
 
-    if [ -d ./external/openh264/builds/$1/lib ]; then
-        cp -v ./external/openh264/builds/$1/lib/*.a  $BASE_DIR/lib/$1
+    if [ -d ./third_party/openh264/builds/$1/lib ]; then
+        cp -v ./third_party/openh264/builds/$1/lib/*.a  $BASE_DIR/lib/$1
     fi
 
-    if [ -d ./external/opus/build/built/*$1.sdk/lib ]; then
-        cp -v ./external/opus/build/built/*$1.sdk/lib/*.a  $BASE_DIR/lib/$1
+    if [ -d ./third_party/opus/build/built/*$1.sdk/lib ]; then
+        cp -v ./third_party/opus/build/built/*$1.sdk/lib/*.a  $BASE_DIR/lib/$1
     fi
     
-    if [ -d ./external/openssl_ios/bin/*$1.sdk/lib ]; then
-        cp -v ./external/openssl_ios/bin/*$1.sdk/lib/*.a  $BASE_DIR/lib/$1
+    if [ -d ./third_party/openssl_ios/bin/*$1.sdk/lib ]; then
+        cp -v ./third_party/openssl_ios/bin/*$1.sdk/lib/*.a  $BASE_DIR/lib/$1
     fi
 
     # if [ $INDEPENDENT_WEBRTC = true ]; then
@@ -709,7 +709,7 @@ function create_framework {
 function copy_swig_bindings () {
     cd $BASE_DIR
     if [ -d "$PJSIP_SRC_DIR/pjsip-apps/src/swig/csharp/pjsua2maui/pjsua2maui" ]; then 
-        cp -v -r "$PJSIP_SRC_DIR/pjsip-apps/src/swig/csharp/pjsua2maui/pjsua2maui/pjsua2" "lib/"
+        cp -v -r "$PJSIP_SRC_DIR/pjsip-apps/src/swig/csharp/pjsua2maui/pjsua2maui/pjsua2" "pjsua2maui/pjsua2/"
     fi
 }
 

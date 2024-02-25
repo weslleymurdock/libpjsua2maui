@@ -3,7 +3,7 @@
     <metadata>
         <id>libpjsua2.maui</id>
         <title>libpjsua2.maui</title>
-        <version>1.2.14.010</version>
+        <version>1.2.14.020</version>
         <authors>Weslley Murdock</authors> 
         <projectUrl>http://github.com/weslleymurdock/pjsua2maui</projectUrl>
         <description>PJSIP libpjsua2 bindings for .NET MAUI
