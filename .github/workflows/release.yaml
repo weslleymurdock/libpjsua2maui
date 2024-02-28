@@ -34,7 +34,7 @@ jobs:
             prerelease: false
             release_name: ${{ github.ref }}
             tag_name: ${{ github.ref }}
-            body_path: CHANGELOG.md
+            body_path: ${{ github.workspace }}/CHANGELOG.md
         env: 
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: upload .nupkg 
