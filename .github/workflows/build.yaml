@@ -80,4 +80,4 @@ jobs:
         run: dotnet publish src/pjsua2.maui.ios/pjsua2.maui.ios.csproj -c Release -f net7.0-ios --no-restore
       
       - name: Pack
-        run: nuget pack src/libpjsua2.maui.nuspec  -version 2.14.1
+        run: nuget pack src/libpjsua2.maui.nuspec  -version ${GITHUB_REF/refs\/tags\/v/}
