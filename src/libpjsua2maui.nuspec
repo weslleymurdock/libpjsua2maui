@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package>
     <metadata>
-        <id>libpjsua2.maui</id>
-        <title>libpjsua2.maui</title>
-        <version>1.2.14.010</version>
+        <id>libpjsua2maui</id>
+        <title>libpjsua2maui</title>
+        <version>2.14.1</version>
         <authors>Weslley Murdock</authors> 
         <projectUrl>http://github.com/weslleymurdock/libpjsua2maui</projectUrl>
         <description>PJSIP libpjsua2 bindings for .NET MAUI
@@ -13,7 +13,7 @@
             Min Android version : 5.0 (API 21)
             Max Android version : 13.0 (API 33)
             Min iOS version     : 11.0
-            Max iOS version     : 17.4.1
+            Max iOS version     : 17.2
 
             This library enables working with the pjsip SIP stack implementation for make voip
             calls.
