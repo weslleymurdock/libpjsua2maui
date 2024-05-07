@@ -74,6 +74,14 @@ jobs:
       - name: Set VERSION variable from tag
         run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
       
+      - name: Reset GITHUB_TOKEN
+        run: |
+          unset GITHUB_TOKEN
+          gh auth login --hostname 'github.com' --scopes 'read:org,repo,read:packages,write:packages'
+          token="$(gh config get -h github.com oauth_token)"
+          
+          export GITHUB_TOKEN="$token"
+
       - name: Pack
         run: nuget pack src/libpjsua2maui.nuspec  -version "${VERSION}"
       
