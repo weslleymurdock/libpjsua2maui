@@ -75,7 +75,7 @@ jobs:
         run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
       
       - name: Pack
-        run: nuget pack libpjsua2.maui.nuspec  -version "${VERSION}"
+        run: nuget pack src/libpjsua2.maui.nuspec  -version "${VERSION}"
       
       - name: Push to nuget
         run: dotnet nuget push ${{ github.workspace }}/src/libpjsua2.maui.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${API_KEY}
