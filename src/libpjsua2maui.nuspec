@@ -5,7 +5,7 @@
         <title>libpjsua2.maui</title>
         <version>1.2.14.010</version>
         <authors>Weslley Murdock</authors> 
-        <projectUrl>http://github.com/OnboardCode/pjsua2maui</projectUrl>
+        <projectUrl>http://github.com/weslleymurdock/libpjsua2maui</projectUrl>
         <description>PJSIP libpjsua2 bindings for .NET MAUI
             Provides PJSIP bindings for .NET MAUI.
             Pjsip version used is 2.14.1, using thirdy party libs such as openh264, openssl and opus
@@ -18,8 +18,8 @@
             This library enables working with the pjsip SIP stack implementation for make voip
             calls.
             For this release see notes -
-            https://github.com/OnboardCode/pjsua2maui/blob/main/README.md and
-            https://github.com/OnboardCode/pjsua2maui/blob/main/CHANGELOG.md
+            https://github.com/weslleymurdock/libpjsua2maui/blob/main/README.md and
+            https://github.com/weslleymurdock/libpjsua2maui/blob/main/CHANGELOG.md
         </description>
         <releaseNotes>First Release</releaseNotes>
         <!--<icon>icon.png</icon>-->
@@ -44,7 +44,7 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="libpjsua2.maui.targets" target="build\libpjsua2.maui.targets" />
+        <file src="libpjsua2maui.targets" target="build\libpjsua2maui.targets" />
         <file src="libpjsua2.a\lib\x86_64\libpjsua2.a"
             target="runtime\iossimulator-x64\libpjsua2.a" />
         <file src="libpjsua2.a\lib\arm64\libpjsua2.a"
@@ -91,13 +91,13 @@
             target="build\native\android-x86_64\libc++_shared.so" />
 
         <file src="libpjsua2.so\org\pjsip\*.java" target="content" />
-        <file src="pjsua2.maui.ios\bin\Release\net7.0-ios\"
+        <file src="libpjsua2.maui.ios\bin\Release\net7.0-ios\"
             target="lib\net7.0-ios16.1" />
-        <file src="pjsua2.maui.android\bin\Release\net7.0-android\"
+        <file src="libpjsua2.maui.android\bin\Release\net7.0-android\"
             target="lib\net7.0-android33.0" />
-        <file src="pjsua2.maui.ios\bin\Release\net7.0-ios\"
+        <file src="libpjsua2.maui.ios\bin\Release\net7.0-ios\"
             target="ref\net7.0-ios16.1" />
-        <file src="pjsua2.maui.android\bin\Release\net7.0-android\"
+        <file src="libpjsua2.maui.android\bin\Release\net7.0-android\"
             target="ref\net7.0-android33.0" /> 
     </files>
 </package>

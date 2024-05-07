@@ -75,15 +75,15 @@ jobs:
         run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
       
       - name: Pack
-        run: nuget pack src/libpjsua2.maui.nuspec  -version "${VERSION}"
+        run: nuget pack src/libpjsua2maui.nuspec  -version "${VERSION}"
       
       - name: Push to nuget
-        run: dotnet nuget push libpjsua2.maui.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${API_KEY}
+        run: dotnet nuget push libpjsua2maui.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${API_KEY}
         env:
           API_KEY: ${{ secrets.API_KEY }}
         
       - name: Push to github
-        run: dotnet nuget push ${{ github.workspace }}/src/libpjsua2.maui.${VERSION}.nupkg --source https://nuget.pkg.github.com/onboardcode/index.json --api-key ${GITHUB_TOKEN}
+        run: dotnet nuget push ${{ github.workspace }}/libpjsua2maui.${VERSION}.nupkg --source https://nuget.pkg.github.com/weslleymurdock/index.json --api-key ${GITHUB_TOKEN}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -98,12 +98,13 @@ jobs:
             body_path: CHANGELOG.md
         env: 
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: upload .nupkg 
         uses: actions/upload-release-asset@v1
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ${{ github.workspace }}/src/libpjsua2.maui.${VERSION}.nupkg
-            asset_name: libpjsua2.maui.${VERSION}.nupkg
+            asset_path: ${{ github.workspace }}/libpjsua2maui.${VERSION}.nupkg
+            asset_name: libpjsua2maui.${VERSION}.nupkg
             asset_content_type: application/zip

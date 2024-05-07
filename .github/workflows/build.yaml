@@ -70,11 +70,11 @@ jobs:
 
       - name: Restore Dependencies
         run: | 
-          dotnet restore src/pjsua2.maui.android/pjsua2.maui.android.csproj
-          dotnet restore src/pjsua2.maui.ios/pjsua2.maui.ios.csproj
+          dotnet restore src/libpjsua2.maui.android/libpjsua2.maui.android.csproj
+          dotnet restore src/libpjsua2.maui.ios/libpjsua2.maui.ios.csproj
 
       - name: Build MAUI Android
-        run: dotnet publish src/pjsua2.maui.android/pjsua2.maui.android.csproj -c Release -f net7.0-android --no-restore
+        run: dotnet publish src/libpjsua2.maui.android/libpjsua2.maui.android.csproj -c Release -f net7.0-android --no-restore
        
       - name: Build MAUI iOS
-        run: dotnet publish src/pjsua2.maui.ios/pjsua2.maui.ios.csproj -c Release -f net7.0-ios --no-restore
+        run: dotnet publish src/libpjsua2.maui.ios/libpjsua2.maui.ios.csproj -c Release -f net7.0-ios --no-restore

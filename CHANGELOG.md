@@ -1,3 +1,8 @@
+# Version 2.14.1
+    - upgrade pjsip version
+    - follow pjsip version 
+    - publish to nuget
+
 # Version 1.2.14.010
 
     - Unified packages
