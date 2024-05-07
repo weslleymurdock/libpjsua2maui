@@ -75,7 +75,7 @@ jobs:
         run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
       
       - name: Pack
-        run: nuget pack src/libpjsua2maui.nuspec -version "${VERSION}"
+        run: nuget pack src/libpjsua2maui.nuspec  -version "${VERSION}"
       
       - name: Push to nuget
         run: dotnet nuget push libpjsua2maui.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${API_KEY} --skip-duplicate
@@ -93,13 +93,20 @@ jobs:
             body_path: CHANGELOG.md
         env: 
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+     
+      - name: Get Name of Artifact
+        run: |
+          ARTIFACT_PATHNAME=$(ls *.nupkg | head -n 1)
+          ARTIFACT_NAME=$(basename $ARTIFACT_PATHNAME)
+          echo ::set-env name=ARTIFACT_NAME::${ARTIFACT_NAME}
+          echo ::set-env name=ARTIFACT_PATHNAME::${ARTIFACT_PATHNAME}
+    
       - name: upload .nupkg 
         uses: actions/upload-release-asset@v1
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ${{ github.workspace }}/libpjsua2maui.${GITHUB_REF/refs\/tags\/v/}.nupkg
-            asset_name: libpjsua2maui.${GITHUB_REF/refs\/tags\/v/}.nupkg
+            asset_path: ${{ env.ARTIFACT_PATHNAME }}
+            asset_name: ${{ env.ARTIFACT_NAME }}
             asset_content_type: application/zip
