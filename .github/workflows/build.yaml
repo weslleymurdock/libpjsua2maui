@@ -51,7 +51,7 @@ jobs:
       - name: Download Android & iOS Artifacts
         run: |
           echo "Android ..."
-          curl -L -o ./libpjsua2.maui.so.tar.gz https://github.com/weslleymurdock/libpjsua2-android/releases/download/v1.0.0/libpjsua2.tar.gz
+          curl -L -o ./libpjsua2.maui.so.tar.gz https://github.com/weslleymurdock/libpjsua2-android/releases/download/v2.14.1/libpjsua2.tar.gz
           tar -xzvf libpjsua2.maui.so.tar.gz 
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/org/pjsip
           mkdir -p ${{ github.workspace }}/src/pjsua2.maui.android/pjsua2
@@ -61,7 +61,7 @@ jobs:
           mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/java/org/pjsip/* ${{ github.workspace }}/src/libpjsua2.so/org/pjsip/
           mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/* ${{ github.workspace }}/src/libpjsua2.so/lib/
           echo "iOS ..."
-          curl -L -o ./libpjsua2.maui.a.tar.gz https://github.com/weslleymurdock/libpjsua2-ios/releases/download/v1.0.0/libpjsua2.tar.gz
+          curl -L -o ./libpjsua2.maui.a.tar.gz https://github.com/weslleymurdock/libpjsua2-ios/releases/download/v2.14.1/libpjsua2.tar.gz
           tar -xzvf libpjsua2.maui.a.tar.gz
           mkdir -p ${{ github.workspace }}/src/pjsua2.maui.ios/pjsua2
           mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/
@@ -78,8 +78,4 @@ jobs:
        
       - name: Build MAUI iOS
         run: dotnet publish src/pjsua2.maui.ios/pjsua2.maui.ios.csproj -c Release -f net7.0-ios --no-restore
-      
-      - name: pack
-        run: |
-          cd ${{ github.workspace }}/src
-          ./pack.sh
+       
