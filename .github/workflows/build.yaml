@@ -78,6 +78,3 @@ jobs:
        
       - name: Build MAUI iOS
         run: dotnet publish src/pjsua2.maui.ios/pjsua2.maui.ios.csproj -c Release -f net7.0-ios --no-restore
-      
-      - name: Pack
-        run: nuget pack src/libpjsua2.maui.nuspec  -version ${GITHUB_REF/refs\/tags\/v/}
