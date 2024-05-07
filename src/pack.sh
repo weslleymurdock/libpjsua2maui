@@ -1,3 +1,3 @@
 #!/bin/bash
 
-nuget pack libpjsua2.maui.nuspec -version '$1'
+nuget pack libpjsua2maui.nuspec -version '$1'
