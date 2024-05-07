@@ -78,12 +78,12 @@ jobs:
         run: nuget pack src/libpjsua2maui.nuspec  -version "${VERSION}"
       
       - name: Push to nuget
-        run: dotnet nuget push libpjsua2maui.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${API_KEY}
+        run: dotnet nuget push libpjsua2maui.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${API_KEY} --skip-duplicate
         env:
           API_KEY: ${{ secrets.API_KEY }}
         
       - name: Push to github
-        run: dotnet nuget push ${{ github.workspace }}/libpjsua2maui.${VERSION}.nupkg --source https://nuget.pkg.github.com/weslleymurdock/index.json --api-key ${GITHUB_TOKEN}
+        run: dotnet nuget push libpjsua2maui.${VERSION}.nupkg --source https://nuget.pkg.github.com/weslleymurdock/index.json --api-key ${GITHUB_TOKEN} --skip-duplicate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
