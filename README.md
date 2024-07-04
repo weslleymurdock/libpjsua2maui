@@ -7,10 +7,10 @@ The binded pjsip version is 2.14.1, and also includes bindings for third party l
 
 ## Download
 
-You can install using [NuGet](http://nuget.org/packages/SharpCLIParser/](https://www.nuget.org/packages/libpjsua2maui/) via the command line
+You can install using [NuGet](https://www.nuget.org/packages/libpjsua2maui/) via the command line
 
 ```cmd
-cmd> nuget install libpjsua2maui
+C:\> nuget install libpjsua2maui
 ```
 
 You also can use the dotnet cli
