@@ -3,7 +3,7 @@
     <metadata>
         <id>libpjsua2maui</id>
         <title>libpjsua2maui</title>
-        <version>2.14.1</version>
+        <version>2.14.1.1</version>
         <authors>Weslley Murdock</authors> 
         <projectUrl>http://github.com/weslleymurdock/libpjsua2maui</projectUrl>
         <description>PJSIP libpjsua2 bindings for .NET MAUI
@@ -11,9 +11,9 @@
             Pjsip version used is 2.14.1, using thirdy party libs such as openh264, openssl and opus
             #NOTES
             Min Android version : 5.0 (API 21)
-            Max Android version : 13.0 (API 33)
-            Min iOS version     : 11.0
-            Max iOS version     : 17.2
+            Max Android version : 14.0 (API 33)
+            Min iOS version     : 12.2
+            Max iOS version     : 18.1
 
             This library enables working with the pjsip SIP stack implementation for make voip
             calls.
@@ -25,22 +25,22 @@
         <!--<icon>icon.png</icon>-->
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <license type="expression">LGPL-3.0-or-later</license>
-        <copyright>Copyright ©2024 Onboard Code Corporation</copyright>
+        <copyright>Copyright ©2024 Remote Code Hub</copyright>
         <tags>sip voip pjsip pjlib pjsua pjsua2 libpjsua2 pjproject pjsua2maui maui net native</tags>
         <references>
-            <group targetFramework="net7.0-android33.0">
+            <group targetFramework="net9.0-android34.0">
                 <reference file="pjsua2.maui.android.dll" />
                 <reference file="pjsua2.maui.android.pdb" />
             </group>
-            <group targetFramework="net7.0-ios16.1">
+            <group targetFramework="net9.0-ios18.1">
                 <reference file="pjsua2.maui.ios.dll" />
                 <reference file="pjsua2.maui.ios.pdb" />
             </group>
         </references>
         
         <dependencies>
-            <group targetFramework="net7.0-android33.0" />
-            <group targetFramework="net7.0-ios16.1" />
+            <group targetFramework="net9.0-android34.0" />
+            <group targetFramework="net9.0-ios18.1" />
         </dependencies>
     </metadata>
     <files>
@@ -91,14 +91,14 @@
             target="build\native\android-x86_64\libc++_shared.so" />
 
         <file src="libpjsua2.so\org\pjsip\*.java" target="content" />
-        <file src="libpjsua2.maui.ios\bin\Release\net7.0-ios\"
-            target="lib\net7.0-ios16.1" />
-        <file src="libpjsua2.maui.android\bin\Release\net7.0-android\"
-            target="lib\net7.0-android33.0" />
-        <file src="libpjsua2.maui.ios\bin\Release\net7.0-ios\"
-            target="ref\net7.0-ios16.1" />
-        <file src="libpjsua2.maui.android\bin\Release\net7.0-android\"
-            target="ref\net7.0-android33.0" /> 
+        <file src="libpjsua2.maui.ios\bin\Release\net9.0-ios\"
+            target="lib\net9.0-ios18.1" />
+        <file src="libpjsua2.maui.android\bin\Release\net9.0-android\"
+            target="lib\net9.0-android34.0" />
+        <file src="libpjsua2.maui.ios\bin\Release\net9.0-ios\"
+            target="ref\net9.0-ios18.1" />
+        <file src="libpjsua2.maui.android\bin\Release\net9.0-android\"
+            target="ref\net9.0-android34.0" /> 
     </files>
 </package>
 
