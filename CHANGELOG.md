@@ -1,6 +1,6 @@
-# Version 2.14.1.1
+# Version 2.14.1.2
     - added bcg729 to third party built-in libraries
-
+    - upgraded package to .net 9.0, android 14 and ios 18.1
 # Version 2.14.1
     - upgrade pjsip version
     - follow pjsip version 
