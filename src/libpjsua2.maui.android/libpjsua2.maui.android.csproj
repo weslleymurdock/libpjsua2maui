@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net7.0-android</TargetFramework>
+		<TargetFramework>net9.0-android</TargetFramework>
 		<RuntimeIdentifiers>android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
 		<UseMaui>true</UseMaui>
-		<TargetPlatformVersion>33</TargetPlatformVersion>
 		<TargetPlatformMinVersion>21</TargetPlatformMinVersion>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<RootNamespace>pjsua2maui.pjsua2</RootNamespace>
 		<AssemblyName>pjsua2.maui.android</AssemblyName>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageId>libpjsua2.maui.android</PackageId>
-	    <Version>2.14.1</Version>
+	    <Version>2.14.1.1</Version>
 		<Title>PJSIP bindings for .NET MAUI</Title>
 	    <Authors>Weslley Murdock</Authors>
-	    <Company>Onboard Code</Company>
-		<Copyright>Copyright ©2024 Onboard Code Corporation</Copyright>
+	    <Company>Remote Code Hub</Company>
+		<Copyright>Copyright ©2024 Remote Code Hub</Copyright>
 		<PackageOutputPath Condition="'$(PackageOutputPath)'==''">bin\Nuget</PackageOutputPath>
 		<PackageTags>sip;voip;pjsip;pjlib;pjsua;pjsua2;libpjsua2;pjproject;pjsua2maui;maui;net</PackageTags>
 		<Description>PJSIP libpjsua2 bindings for .NET MAUI
 			Provides PJSIP bindings for .NET MAUI.
-			Pjsip version used is 2.14, using thirdy party libs such as openh264, openssl and opus
+			Pjsip version used is 2.14.a, using thirdy party libs such as openh264, openssl and opus
 			#NOTES
 			Min Android version : 5.0 (API 21)
-			Max Android version : 13.0 (API 33)
+			Max Android version : 14.0 (API 33)
 			
 			This library enables working with the pjsip SIP stack implementation for make voip
 			calls.
@@ -38,9 +37,7 @@
 		<PackageProjectUrl>https://github.com/weslleymurdock/pjsua2maui</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/weslleymurdock/pjsua2maui.git</RepositoryUrl>
 	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Platform)'=='net7.0-android|AnyCPU'">
-		<CreatePackage>true</CreatePackage>
-	</PropertyGroup>
-	 
+	<ItemGroup>
+		 <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.0" />
+	</ItemGroup>
 </Project>
