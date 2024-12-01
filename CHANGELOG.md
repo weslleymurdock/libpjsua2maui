@@ -1,3 +1,6 @@
+# Version 2.14.1.1
+    - added bcg729 to third party built-in libraries
+
 # Version 2.14.1
     - upgrade pjsip version
     - follow pjsip version 
