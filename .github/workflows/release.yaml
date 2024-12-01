@@ -18,6 +18,18 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: release file
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ github.ref }}
+          tag_name: ${{ github.ref }}
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
