@@ -11,7 +11,7 @@
             Pjsip version used is 2.14.1, using thirdy party libs such as openh264, openssl and opus
             #NOTES
             Min Android version : 5.0 (API 21)
-            Max Android version : 14.0 (API 33)
+            Max Android version : 14.0 (API 34)
             Min iOS version     : 12.2
             Max iOS version     : 18.1
 
