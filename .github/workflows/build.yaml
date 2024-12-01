@@ -23,22 +23,21 @@ env:
 
 jobs:
   build:
-    runs-on: macos-13
+    runs-on: macos-latest
     name: build
     steps:
-      - name: Setup Xcode
-        uses: maxim-lobanov/setup-xcode@v1
+      - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.1'
+          xcode-version: latest-stable
  
       - name: Checkout
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
-      - name: Setup .NET 7
-        uses: actions/setup-dotnet@v3
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            7.0.x
+            9.0.x
 
       - name: Install MAUI Workload
         run: dotnet workload install maui --ignore-failed-sources
@@ -46,12 +45,12 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'microsoft'
-          java-version: '11'
+          java-version: '17'
          
       - name: Download Android & iOS Artifacts
         run: |
           echo "Android ..."
-          curl -L -o ./libpjsua2.maui.so.tar.gz https://github.com/weslleymurdock/libpjsua2-android/releases/download/v2.14.1/libpjsua2.tar.gz
+          curl -L -o ./libpjsua2.maui.so.tar.gz https://github.com/weslleymurdock/libpjsua2-android/releases/download/v2.14.1.1/libpjsua2.tar.gz
           tar -xzvf libpjsua2.maui.so.tar.gz 
           mkdir -p ${{ github.workspace }}/src/libpjsua2.so/org/pjsip
           mkdir -p ${{ github.workspace }}/src/pjsua2.maui.android/pjsua2
@@ -61,7 +60,7 @@ jobs:
           mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/java/org/pjsip/* ${{ github.workspace }}/src/libpjsua2.so/org/pjsip/
           mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/* ${{ github.workspace }}/src/libpjsua2.so/lib/
           echo "iOS ..."
-          curl -L -o ./libpjsua2.maui.a.tar.gz https://github.com/weslleymurdock/libpjsua2-ios/releases/download/v2.14.1/libpjsua2.tar.gz
+          curl -L -o ./libpjsua2.maui.a.tar.gz https://github.com/weslleymurdock/libpjsua2-ios/releases/download/v2.14.1.1/libpjsua2.tar.gz
           tar -xzvf libpjsua2.maui.a.tar.gz
           mkdir -p ${{ github.workspace }}/src/pjsua2.maui.ios/pjsua2
           mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/
