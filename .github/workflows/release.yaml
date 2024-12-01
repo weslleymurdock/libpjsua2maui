@@ -66,10 +66,10 @@ jobs:
           dotnet restore src/libpjsua2.maui.ios/libpjsua2.maui.ios.csproj
 
       - name: Build MAUI Android
-        run: dotnet publish src/libpjsua2.maui.android/libpjsua2.maui.android.csproj -c Release -f net7.0-android --no-restore
+        run: dotnet publish src/libpjsua2.maui.android/libpjsua2.maui.android.csproj -c Release -f net9.0-android --no-restore
        
       - name: Build MAUI iOS
-        run: dotnet publish src/libpjsua2.maui.ios/libpjsua2.maui.ios.csproj -c Release -f net7.0-ios --no-restore
+        run: dotnet publish src/libpjsua2.maui.ios/libpjsua2.maui.ios.csproj -c Release -f net9.0-ios --no-restore
       
       - name: Set VERSION variable from tag
         run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
