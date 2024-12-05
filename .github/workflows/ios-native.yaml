@@ -1,3 +1,4 @@
+name: build native ios libraries
 on:
   push:
     branches: [ main, develop ]
@@ -84,7 +85,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: openssl-${{ matrix.arch }}
+        name: openh264-${{ matrix.arch }}
         path: ${{ env.OPENH264_PATH }}/builds/${{ matrix.arch }}/
         overwrite: true
 
@@ -205,6 +206,108 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: openssl-${{ matrix.arch }}
+        path: ${{ steps.build.outputs.artifact }}
+        overwrite: true
+      env:
+        SDKVERSION: 18.1
+
+  opus:
+    strategy:
+      matrix:
+        arch: [x86_64, arm64]
+    runs-on: macos-latest
+    name: Build OpenSSL 
+    permissions:
+      contents: write
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+         submodules: 'true'
+         
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: 'true'
+         
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+    
+    - name: Install deps
+      run: |
+        brew install nasm autoconf automake libtool swig
+      shell: sh
+         
+    - name: Build opus
+      id: build
+      run: |
+        opus_version="1.5.2"
+        opus_opt_cflags="-Ofast -flto -g"
+        opus_opt_ldflags="-flto"
+        opus_opt_config_args=""
+
+        xcode_dev_path=`xcode-select -print-path`
+
+        opus_repo_dir=${{ env.OPUS_PATH }}
+        opus_output_dir="${opus_repo_dir}/dependencies"
+        opus_build_build_dir="${opus_repo_dir}/build"
+        opus_src_dir="${opus_repo_dir}/src"
+        opus_inter_dir="${opus_build_build_dir}/built"
+
+        mkdir -p "${opus_output_dir}/include"
+        mkdir -p "${opus_output_dir}/lib" 
+        mkdir -p $opus_inter_dir
+
+        cd "${opus_repo_dir}"
+
+        ccache=""
+
+      
+        echo "-- Opus: Compiling ${{ matrix.arch }}"
+        opus_extra_cflags="-arch ${{ matrix.arch }}"
+        if [ "${{ matrix.arch }}" == "i386" ] || [ "${{ matrix.arch }}" == "x86_64" ]; then
+            os_platform="iPhoneSimulator"
+            opus_extra_flags="--with-pic"
+            opus_extra_config="--host=${{ matrix.arch }}-apple-darwin"
+        else
+            os_platform="iPhoneOS"
+            opus_extra_config="--host=arm-apple-darwin"
+        fi
+
+        mkdir -p "${opus_inter_dir}/${os_platform}${{ env.SDKVERSION }}-${{ matrix.arch }}.sdk"
+        echo "artifact=${opus_inter_dir}/${os_platform}${{ env.SDKVERSION }}-${{ matrix.arch }}.sdk" >> "$GITHUB_OUTPUT"
+        
+        ./autogen.sh
+        
+        ./configure \
+            --enable-float-approx --disable-shared --enable-static \
+            --with-pic --disable-extra-programs --disable-doc ${opus_extra_config} \
+            --prefix="${opus_inter_dir}/${os_platform}${{ env.SDKVERSION }}-${{ matrix.arch }}.sdk" \
+            ${opus_extra_config} \
+            LDFLAGS="$LDFLAGS ${opus_opt_ldflags} -fPIE -miphoneos-version-min=${{env.MIN_IOS_VERSION}} -L${opus_output_dir}/lib" \
+            CFLAGS="$CFLAGS ${opus_extra_cflags} ${opus_opt_cflags} -fPIE -miphoneos-version-min=${{env.MIN_IOS_VERSION}} -I${opus_output_dir}/include -isysroot ${xcode_dev_path}/Platforms/${os_platform}.platform/Developer/SDKs/${os_platform}.sdk" || exit
+
+        make -j4 || exit
+
+        make install || exit
+
+        make clean || exit
+      shell: sh
+      env:
+        SDKVERSION: 18.1
+        IOS_MIN_SDK_VERSION: 12.2  
+        CONFIG_DISABLE_BITCODE: true
+        DEVELOPER: $(xcode-select -print-path)
+        IOS_SDKVERSION: $(xcrun -sdk iphoneos --show-sdk-version)
+        BUILD_THREADS: $(sysctl hw.ncpu | awk '{print $2}')
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: opus-${{ matrix.arch }}
         path: ${{ steps.build.outputs.artifact }}
         overwrite: true
       env:
