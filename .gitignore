@@ -471,3 +471,12 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
  
+/src/libpjsua2.maui.android/org/pjsip/PjCamera.java
+/src/libpjsua2.maui.android/org/pjsip/PjCamera2.java
+/src/libpjsua2.maui.android/org/pjsip/PjCameraInfo.java
+/src/libpjsua2.maui.android/org/pjsip/PjCameraInfo2.java
+/src/libpjsua2.maui.ios/pjsua2maui/pjsua2
+/src/libpjsua2.maui.android/pjsua2maui
+/src/libpjsua2.runtime.android/lib
+/src/libpjsua2.runtime.ios/lib
+/src/workload-install.ps1
