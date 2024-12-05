@@ -1,0 +1,45 @@
+
+on:
+    push:
+      branches: [ main, develop ]
+      paths-ignore:
+        - '**/*.md'
+        - '**/*.gitignore'
+        - '**/*.gitattributes'
+      
+    pull_request:
+      types: [opened, synchronize, reopened]  
+    
+    workflow_dispatch:
+  
+  permissions:
+    contents: read
+
+env:
+    BCG729_PATH:  ${{ github.workspace }}/lib/bcg729
+    OPENH264_PATH: ${{ github.workspace }}/lib/openh264
+    OPENSSL_PATH: ${{ github.workspace }}/lib/openssl
+    OPUS_PATH: ${{ github.workspace }}/lib/opus
+    PJSIP_PATH: ${{ github.workspace }}/lib/pjsip
+
+
+jobs:
+  openh264:
+    strategy:
+      matrix:
+        arch: [x86_64, arm64]
+    runs-on: macos-latest
+    name: Build OpenH264 
+    permissions:
+      contents: write
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+         submodules: 'true'
+         
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: 'true'
