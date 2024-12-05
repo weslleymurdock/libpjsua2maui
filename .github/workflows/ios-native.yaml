@@ -50,8 +50,8 @@ jobs:
     
     - name: Install deps
       run: |
-
-      shell: zsh
+        brew install nasm autoconf automake libtool swig
+      shell: sh
          
     - name: Build For all archs
       run: |
@@ -79,7 +79,7 @@ jobs:
         mv "${h264_makefile_bak}" "${h264_makefile}"
         popd > /dev/null
         
-      shell: zsh
+      shell: sh
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
