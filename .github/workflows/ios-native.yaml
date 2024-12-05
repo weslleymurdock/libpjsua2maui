@@ -117,7 +117,8 @@ jobs:
         brew install nasm autoconf automake libtool swig
       shell: sh
          
-    - name: Build For all archs
+    - name: Build OpenSSL
+      id: build
       run: |
         INCLUDE_DIR=""
         OPENSSLCONF_ALL=()
@@ -154,6 +155,7 @@ jobs:
 
         # Prepare TARGETDIR  
         TARGETDIR="${{ env.OPENSSL_PATH}}/bin/${PLATFORM}${{env.SDKVERSION}}-${{ matrix.arch }}.sdk"
+        echo "artifact='${TARGETDIR}'" >> "$GITHUB_OUTPUT"
         mkdir -p "${TARGETDIR}"
         ## Determine config options
         # Add build target, --prefix and prevent async (references to getcontext(),
@@ -202,6 +204,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: openssl-${{ matrix.arch }}
-        path: ${{ env.OPENSSL_PATH}}/bin/iPhone*${{env.SDKVERSION}}-${{ matrix.arch }}.sdk
+        path: ${{ steps.build.outputs.artifact }}
       env:
         SDKVERSION: 18.1
