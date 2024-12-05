@@ -20,7 +20,7 @@ env:
     OPENSSL_PATH: ${{ github.workspace }}/lib/openssl
     OPUS_PATH: ${{ github.workspace }}/lib/opus
     PJSIP_PATH: ${{ github.workspace }}/lib/pjsip
-
+    MIN_IOS_VERSION: 12.2
 
 jobs:
   openh264:
@@ -73,9 +73,9 @@ jobs:
         sed -i.deleteme "s/${h264_sed_src}/${h264_sed_dst}/" "${h264_makefile}"
         rm ${h264_makefile}.deleteme
         echo "--- Run make file for ${{ matrix.arch }}"
-        make OS=ios ARCH=${{ matrix.arch }} SDK_MIN=${MIN_IOS_VERSION} v=No >> "${h264_log}"  || exit
-        make OS=ios ARCH=${{ matrix.arch }} SDK_MIN=${MIN_IOS_VERSION} v=No install >> "${h264_log}" || exit
-        make OS=ios ARCH=${{ matrix.arch }} SDK_MIN=${MIN_IOS_VERSION} v=No clean >> "${h264_log}" || exit
+        make OS=ios ARCH=${{ matrix.arch }} SDK_MIN=${{env.MIN_IOS_VERSION}} v=No >> "${h264_log}"  || exit
+        make OS=ios ARCH=${{ matrix.arch }} SDK_MIN=${{env.MIN_IOS_VERSION}} v=No install >> "${h264_log}" || exit
+        make OS=ios ARCH=${{ matrix.arch }} SDK_MIN=${{env.MIN_IOS_VERSION}} v=No clean >> "${h264_log}" || exit
         mv "${h264_makefile_bak}" "${h264_makefile}"
         popd > /dev/null
         
