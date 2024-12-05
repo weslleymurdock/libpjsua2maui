@@ -155,7 +155,7 @@ jobs:
 
         # Prepare TARGETDIR  
         TARGETDIR="${{ env.OPENSSL_PATH}}/bin/${PLATFORM}${{env.SDKVERSION}}-${{ matrix.arch }}.sdk"
-        echo "artifact='${TARGETDIR}'" >> "$GITHUB_OUTPUT"
+        echo "artifact=${TARGETDIR}" >> "$GITHUB_OUTPUT"
         mkdir -p "${TARGETDIR}"
         ## Determine config options
         # Add build target, --prefix and prevent async (references to getcontext(),
