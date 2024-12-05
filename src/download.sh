@@ -1,10 +1,14 @@
 #!/bin/sh
 set -e
-
-export VERSION="v"
- 
+TARGET_ANDROID=0
+TARGET_IOS=0
+TARGET_WINDOWS=0
+TARGET_MACOSX=0
+CLEAN_ANDROID=0
+CLEAN_IOS=0
+CLEAN_WINDOWS=0
+CLEAN_MACOSX=0
 function downloadAndroid () {
-
     if [ "$VERSION" == "v" ]; then 
         echo "please set a version with 'v=*' parameter"
         exit 1
@@ -43,28 +47,47 @@ function downloadWin () {
      echo "not implemented"
      
 }
-DOWNLOAD_ANDROID=0
-DOWNLOAD_IOS=0
-DOWNLOAD_WINDOWS=0
-DOWNLOAD_MACOSX=0
+
+function setupTargetsToClean () {
+     if [ "$TARGET_ANDROID" == "1" ]; then
+        CLEAN_ANDROID=1
+    fi
+
+    if [ "$TARGET_IOS" == "1" ]; then
+        CLEAN_IOS=1
+    fi
+
+    if [ "$TARGET_WINDOWS" == "1" ]; then
+        CLEAN_WINDOWS=1
+    fi
+
+    if [ "$TARGET_MACOSX" == "1" ]; then
+        CLEAN_MACOSX=1
+    fi
+     
+}
+
 
 for i in "$@"; do
     case $i in
     --android | android)
-    DOWNLOAD_ANDROID=1
+    TARGET_ANDROID=1
     shift
     ;;
     --ios | ios)
-    DOWNLOAD_IOS=1
+    TARGET_IOS=1
     shift
     ;;
     --macos | osx)
-    DOWNLOAD_MACOSX=1
-
+    TARGET_MACOSX=1
     shift
     ;;
     --windows | win)
-    DOWNLOAD_WINDOWS=1
+    TARGET_WINDOWS=1
+    shift
+    ;;
+    --clean | clean)
+    setupTargetsToClean
     shift
     ;;
     *)
@@ -72,19 +95,19 @@ for i in "$@"; do
     esac
 done
 
-if [ "$DOWNLOAD_ANDROID" == "1" ]; then
+if [ "$TARGET_ANDROID" == "1" ]; then
     downloadAndroid
 fi
 
-if [ "$DOWNLOAD_IOS" == "1" ]; then
+if [ "$TARGET_IOS" == "1" ]; then
     downloadiOS
 fi
 
-if [ "$DOWNLOAD_WINDOWS" == "1" ]; then
+if [ "$TARGET_WINDOWS" == "1" ]; then
     downloadWin
 fi
 
-if [ "$DOWNLOAD_MACOSX" == "1" ]; then
+if [ "$TARGET_MACOSX" == "1" ]; then
     downloadMac
 fi
 
