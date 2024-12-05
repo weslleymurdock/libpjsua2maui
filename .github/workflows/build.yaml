@@ -52,22 +52,21 @@ jobs:
           echo "Android ..."
           curl -L -o ./libpjsua2.maui.so.tar.gz https://github.com/weslleymurdock/libpjsua2-android/releases/download/v2.14.1.1/libpjsua2.tar.gz
           tar -xzvf libpjsua2.maui.so.tar.gz 
-          mkdir -p ${{ github.workspace }}/src/libpjsua2.so/org/pjsip
-          mkdir -p ${{ github.workspace }}/src/libpjsua2.maui.android/pjsua2
-          mkdir -p ${{ github.workspace }}/src/libpjsua2.so/lib/
-          mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/libpjsua2.maui.android/* ${{ github.workspace }}/src/libpjsua2.maui.android/pjsua2
-          rm -rf ${{ github.workspace }}/home/runner/libpjsua2/lib/java/org/pjsip/pjsua2
-          mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/java/org/pjsip/* ${{ github.workspace }}/src/libpjsua2.so/org/pjsip/
-          mv -v ${{ github.workspace }}/home/runner/libpjsua2/lib/* ${{ github.workspace }}/src/libpjsua2.so/lib/
+          mkdir -p ./libpjsua2.maui.android/org/pjsip
+          mkdir -p ./libpjsua2.maui.android/pjsua2maui
+          mkdir -p ./libpjsua2.runtime.android/lib/
+          mv -v ./home/runner/libpjsua2/lib/libpjsua2.maui.android/*.cs ./libpjsua2.maui.android/pjsua2maui
+          rm -rf ./home/runner/libpjsua2/lib/java/org/pjsip/pjsua2
+          mv -v ./home/runner/libpjsua2/lib/java/org/pjsip/* ./libpjsua2.maui.android/org/pjsip/
+          mv -v ./home/runner/libpjsua2/lib/* ./libpjsua2.runtime.android/lib/
           echo "iOS ..."
           curl -L -o ./libpjsua2.maui.a.tar.gz https://github.com/weslleymurdock/libpjsua2-ios/releases/download/v2.14.1.1/libpjsua2.tar.gz
           tar -xzvf libpjsua2.maui.a.tar.gz
-          mkdir -p ${{ github.workspace }}/src/libpjsua2.maui.ios/pjsua2
-          mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/arm64
-          mkdir -p ${{ github.workspace }}/src/libpjsua2.a/lib/x86_64
-          mv -v ${{ github.workspace }}/libpjsua2/lib/pjsua2maui/pjsua2/* ${{ github.workspace }}/src/libpjsua2.maui.ios/pjsua2
-          mv -v ${{ github.workspace }}/libpjsua2/lib/arm64/* ${{ github.workspace }}/src/libpjsua2.a/lib/arm64
-          mv -v ${{ github.workspace }}/libpjsua2/lib/x86_64/* ${{ github.workspace }}/src/libpjsua2.a/lib/x86_64
+          mkdir -p ./libpjsua2.maui.ios/pjsua2maui
+          mkdir -p ./libpjsua2.runtime.ios/lib/fat 
+          mv -v ./libpjsua2/lib/pjsua2maui/pjsua2/* ./libpjsua2.maui.ios/pjsua2maui
+          lipo -create -output ./libpjsua2.runtime.ios/lib/fat/libpjsua2.a ./libpjsua2/lib/**/*.a 
+          rm -rf ./libpjsua2 libpjsua2.maui.a.tar.gz
 
       - name: Restore Dependencies
         run: | 
