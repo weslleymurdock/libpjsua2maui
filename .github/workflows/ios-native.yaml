@@ -86,6 +86,7 @@ jobs:
       with:
         name: openssl-${{ matrix.arch }}
         path: ${{ env.OPENH264_PATH }}/builds/${{ matrix.arch }}/
+        overwrite: true
 
   openssl:
     strategy:
@@ -205,5 +206,6 @@ jobs:
       with:
         name: openssl-${{ matrix.arch }}
         path: ${{ steps.build.outputs.artifact }}
+        overwrite: true
       env:
         SDKVERSION: 18.1
