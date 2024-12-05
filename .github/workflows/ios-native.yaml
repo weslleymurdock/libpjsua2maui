@@ -126,6 +126,11 @@ jobs:
         LIBCRYPTO_IOS=()
         LIBCRYPTO_IOSSIM=()
         export OPENSSL_LOCAL_CONFIG_DIR=${{ github.workspace }}/res/ssl/config
+        export SDKVERSION
+        export IOS_MIN_SDK_VERSION
+        export TVOS_MIN_SDK_VERSION
+        export WATCHOS_MIN_SDK_VERSION
+        export CONFIG_DISABLE_BITCODE
         cd ${{ env.OPENSSL_PATH }}
         
         chmod u+x ./Configure
@@ -143,9 +148,9 @@ jobs:
         #ARCH=$(echo "${TARGET}" | sed -E 's|^.*\-([^\-]+)$|\1|g')
         ARCH=${{ matrix.arch }}
         # Cross compile references, see Configurations/10-main.conf
-        CROSS_COMPILE="${{ env.DEVELOPER}}/Toolchains/XcodeDefault.xctoolchain/usr/bin/"
-        CROSS_TOP="${{ env.DEVELOPER }}/Platforms/${PLATFORM}.platform/Developer"
-        CROSS_SDK="${PLATFORM}${{env.SDKVERSION}}.sdk"
+        export CROSS_COMPILE="${{ env.DEVELOPER}}/Toolchains/XcodeDefault.xctoolchain/usr/bin/"
+        export CROSS_TOP="${{ env.DEVELOPER }}/Platforms/${PLATFORM}.platform/Developer"
+        export CROSS_SDK="${PLATFORM}${{env.SDKVERSION}}.sdk"
 
         # Prepare TARGETDIR  
         TARGETDIR="${{ env.OPENSSL_PATH}}/bin/${PLATFORM}${{env.SDKVERSION}}-${{ matrix.arch }}.sdk"
