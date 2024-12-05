@@ -125,7 +125,7 @@ jobs:
         LIBSSL_IOSSIM=()
         LIBCRYPTO_IOS=()
         LIBCRYPTO_IOSSIM=()
-        
+        export OPENSSL_LOCAL_CONFIG_DIR=${{ github.workspace }}/res/ssl/config
         cd ${{ env.OPENSSL_PATH }}
         
         chmod u+x ./Configure
@@ -149,7 +149,7 @@ jobs:
 
         # Prepare TARGETDIR  
         TARGETDIR="${{ env.OPENSSL_PATH}}/bin/${PLATFORM}${{env.SDKVERSION}}-${{ matrix.arch }}.sdk"
-
+        mkdir -p "${TARGETDIR}"
         ## Determine config options
         # Add build target, --prefix and prevent async (references to getcontext(),
         # setcontext() and makecontext() result in App Store rejections) and creation
