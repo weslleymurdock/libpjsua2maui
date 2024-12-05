@@ -82,7 +82,7 @@ jobs:
       shell: zsh
         
     - name: Upload artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: openssl-${{ matrix.arch }}
         path: ${{ env.OPENH264_PATH }}/builds/${{ matrix.arch }}/
