@@ -1,19 +1,18 @@
-
 on:
-    push:
-      branches: [ main, develop ]
-      paths-ignore:
-        - '**/*.md'
-        - '**/*.gitignore'
-        - '**/*.gitattributes'
+  push:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
       
-    pull_request:
-      types: [opened, synchronize, reopened]  
+  pull_request:
+    types: [opened, synchronize, reopened]  
     
-    workflow_dispatch:
+  workflow_dispatch:
   
-  permissions:
-    contents: read
+permissions:
+  contents: read
 
 env:
     BCG729_PATH:  ${{ github.workspace }}/lib/bcg729
@@ -83,7 +82,7 @@ jobs:
       shell: zsh
         
     - name: Upload artifacts
-    uses: actions/upload-artifact@v2
-    with:
+      uses: actions/upload-artifact@v2
+      with:
         name: openssl-${{ matrix.arch }}
         path: ${{ env.OPENH264_PATH }}/builds/${{ matrix.arch }}/
