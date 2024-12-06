@@ -51,7 +51,7 @@ jobs:
     
     - name: Install deps
       run: |
-        brew install nasm autoconf automake libtool swig
+        brew install nasm autoconf automake libtool 
       shell: sh
          
     - name: Build For all archs
@@ -116,7 +116,7 @@ jobs:
     
     - name: Install deps
       run: |
-        brew install nasm autoconf automake libtool swig
+        brew install nasm autoconf automake libtool 
       shell: sh
          
     - name: Build OpenSSL
@@ -238,7 +238,7 @@ jobs:
     
     - name: Install deps
       run: |
-        brew install nasm autoconf automake libtool swig
+        brew install nasm autoconf automake libtool 
       shell: sh
          
     - name: Build opus
@@ -339,7 +339,7 @@ jobs:
     
     - name: Install deps
       run: |
-        brew install nasm autoconf automake libtool swig
+        brew install nasm autoconf automake libtool 
       shell: sh
             
     - name: Build bcg729
@@ -425,7 +425,10 @@ jobs:
     
     - name: Install deps
       run: |
-        brew install nasm autoconf automake libtool swig llvm 
+        brew install nasm autoconf automake libtool swig 
+        if [ "${{ matrix.arch }}" == "x86_64" ]; then
+          brew install llvm
+        fi
       shell: sh
            
 
@@ -438,7 +441,9 @@ jobs:
 
         if [ "${{ matrix.arch }}" == "x86_64" ]; then
             export DEVPATH="$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer"
+            export ISYSROOT=$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
             echo $DEVPATH
+            echo $ISYSROOT
             export PATH="/opt/homebrew/opt/llvm/bin:$PATH" 
             export CC=/opt/homebrew/opt/llvm/bin/clang 
             export CXX=/opt/homebrew/opt/llvm/bin/clang++ 
@@ -451,8 +456,10 @@ jobs:
             export MIN_IOS="-mios-simulator-version-min=${{ env.MIN_IOS_VERSION }}"
         
             export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
-            ARCH="-arch ${{ matrix.arch }}" ./configure  --host=${{ matrix.arch }}-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/  || cat *config.log
-        
+            ARCH="-arch ${{ matrix.arch }}" ./configure  --host=${{ matrix.arch }}-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ --isysroot=${ISYSROOT} || cat *config.log
+            make dep
+
+            make CXXFLAGS="-isysroot $ISYSROOT" LDFLAGS="-isysroot $ISYSROOT"
         else
 
             export DEVPATH="$(xcode-select -p)/Platforms/iPhoneOS.platform/Developer"
@@ -471,11 +478,11 @@ jobs:
              
             ARCH="-arch ${{ matrix.arch }} " ./configure  --host=arm-apple-darwin  --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/   || cat *config.log
             
-        fi
-        make dep
-        
-        make 
+            make dep
 
+            make
+        fi
+        
         cd ./pjsip-apps/src/swig 
 
         sed -i'' -e 's/xamarin/maui/g' ./csharp/Makefile
