@@ -447,11 +447,11 @@ jobs:
             echo $DEVPATH
             echo $ISYSROOT
             export PATH="/opt/homebrew/opt/llvm/bin:$PATH" 
-            export CC=/opt/homebrew/opt/llvm/bin/clang 
-            export CXX=/opt/homebrew/opt/llvm/bin/clang++ 
-            export AR=/opt/homebrew/opt/llvm/bin/llvm-ar 
-            export RANLIB=/opt/homebrew/opt/llvm/bin/llvm-ranlib 
-            export LD=/opt/homebrew/opt/llvm/bin/ld.lld
+            export CC="/opt/homebrew/opt/llvm/bin/clang -isysroot $SDKROOT" 
+            export CXX="/opt/homebrew/opt/llvm/bin/clang++ -isysroot $SDKROOT"
+            export AR="/opt/homebrew/opt/llvm/bin/llvm-ar -isysroot $SDKROOT"
+            export RANLIB="/opt/homebrew/opt/llvm/bin/llvm-ranlib -isysroot $SDKROOT"
+            export LD="/opt/homebrew/opt/llvm/bin/ld.lld -isysroot $SDKROOT"
 
             export CFLAGS="-arch ${{ matrix.arch }} -O2 -m64 -mios-simulator-version-min=${{ env.MIN_IOS_VERSION }} -I${{ github.workspace }}/libs/bcg729/include -I${{ github.workspace }}/libs/ssl/include -I${{ github.workspace }}/libs/opus/include -I${{ github.workspace }}/libs/h264/include"
             export LDFLAGS="-arch ${{ matrix.arch }} -O2 -m64 -mios-simulator-version-min=${{ env.MIN_IOS_VERSION }} -L${{ github.workspace }}/libs/bcg729/lib -L${{ github.workspace }}/libs/ssl/lib -L${{ github.workspace }}/libs/opus/lib -L${{ github.workspace }}/libs/h264/lib"
@@ -461,7 +461,7 @@ jobs:
             ARCH="-arch ${{ matrix.arch }}" ./configure  --host=${{ matrix.arch }}-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/  || cat *config.log
             make dep
 
-            make CXXFLAGS="-isysroot $ISYSROOT" LDFLAGS="-isysroot $ISYSROOT"
+            make  
         else
 
             export DEVPATH="$(xcode-select -p)/Platforms/iPhoneOS.platform/Developer"
@@ -483,7 +483,7 @@ jobs:
             
             make dep
 
-            make CXXFLAGS="-isysroot $SDKROOT" LDFLAGS="-isysroot $SDKROOT"
+            make 
         fi
         
 
