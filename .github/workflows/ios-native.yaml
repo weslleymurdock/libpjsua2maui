@@ -280,7 +280,7 @@ jobs:
         mkdir -p "${opus_inter_dir}/${os_platform}${{ env.SDKVERSION }}-${{ matrix.arch }}.sdk"
         echo "artifact=${opus_inter_dir}/${os_platform}${{ env.SDKVERSION }}-${{ matrix.arch }}.sdk" >> "$GITHUB_OUTPUT"
         
-        #./autogen.sh
+        ./autogen.sh
         
         ./configure \
             --enable-float-approx --disable-shared --enable-static \
