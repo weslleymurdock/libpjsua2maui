@@ -457,7 +457,7 @@ jobs:
             echo $RANLIB
             echo LD
 
-            ARCH="-arch ${{ matrix.arch }} " ./configure --host=${{ matrix.arch }}-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
+            ARCH="-arch ${{ matrix.arch }} " ./configure  --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
         
         else
 
