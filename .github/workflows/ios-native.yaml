@@ -157,7 +157,7 @@ jobs:
 
         # Prepare TARGETDIR  
         TARGETDIR="${{ env.OPENSSL_PATH}}/bin/${PLATFORM}${{env.SDKVERSION}}-${{ matrix.arch }}.sdk"
-        echo "artifact=${TARGETDIR}" >> "$GITHUB_OUTPUT"
+        echo "artifact=${TARGETDIR}" >> ${{ env.BCG729_PATH }}/${os_platform}${{ env.MIN_IOS_VERSION  }}-${{ matrix.arch }}.sdk/
         mkdir -p "${TARGETDIR}"
         ## Determine config options
         # Add build target, --prefix and prevent async (references to getcontext(),
@@ -166,7 +166,7 @@ jobs:
         LOCAL_CONFIG_OPTIONS="${TARGET} --prefix=${TARGETDIR} ${CONFIG_OPTIONS} no-async no-shared"
 
         # Only relevant for 64 bit builds
-        # if [[ "${CONFIG_ENABLE_EC_NISTP_64_GCC_128}" == "true" && "${ARCH}" == *64  ]]; then
+        # if [[ "${CONFIG_ENABLE_EC_NISTP_64_GCC_128}" == "true" && "${{ matrix.arch }}" == *64  ]]; then
         #     LOCAL_CONFIG_OPTIONS="${LOCAL_CONFIG_OPTIONS} enable-ec_nistp_64_gcc_128"
         # fi
 
@@ -216,7 +216,7 @@ jobs:
       matrix:
         arch: [x86_64, arm64]
     runs-on: macos-latest
-    name: Build OpenSSL 
+    name: Build Opus 
     permissions:
       contents: write
     steps:
@@ -248,7 +248,7 @@ jobs:
         opus_opt_cflags="-Ofast -flto -g"
         opus_opt_ldflags="-flto"
         opus_opt_config_args=""
-
+        DEVELOPER=`xcode-select -print-path`
         xcode_dev_path=`xcode-select -print-path`
 
         opus_repo_dir=${{ env.OPUS_PATH }}
@@ -264,7 +264,7 @@ jobs:
         cd "${opus_repo_dir}"
 
         ccache=""
-
+        
       
         echo "-- Opus: Compiling ${{ matrix.arch }}"
         opus_extra_cflags="-arch ${{ matrix.arch }}"
@@ -280,7 +280,7 @@ jobs:
         mkdir -p "${opus_inter_dir}/${os_platform}${{ env.SDKVERSION }}-${{ matrix.arch }}.sdk"
         echo "artifact=${opus_inter_dir}/${os_platform}${{ env.SDKVERSION }}-${{ matrix.arch }}.sdk" >> "$GITHUB_OUTPUT"
         
-        ./autogen.sh
+        #./autogen.sh
         
         ./configure \
             --enable-float-approx --disable-shared --enable-static \
@@ -293,8 +293,7 @@ jobs:
         make -j4 || exit
 
         make install || exit
-
-        make clean || exit
+ 
       shell: sh
       env:
         SDKVERSION: 18.1
@@ -308,6 +307,74 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: opus-${{ matrix.arch }}
+        path: ${{ steps.build.outputs.artifact }}
+        overwrite: true
+      env:
+        SDKVERSION: 18.1
+    
+  bcg729:
+    strategy:
+      matrix:
+        arch: [x86_64, arm64]
+    runs-on: macos-latest
+    name: Build BCG729 
+    permissions:
+        contents: write
+    steps:
+        
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: 'true'
+                
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: 'true'
+            
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+    
+    - name: Install deps
+      run: |
+        brew install nasm autoconf automake libtool swig
+        shell: sh
+            
+    - name: Build bcg729
+      id: build
+      run: |
+        echo "Use BCG729"
+        xcode_dev_path=`xcode-select -print-path`
+        
+        cd ${{ env.BCG729_PATH }}
+    
+        echo "-- BCG729: Compiling ${{ matrix.arch }}" 
+        if [ "${{ matrix.arch }}" == "x86_64" ]; then
+            os_platform="iPhoneSimulator" 
+            C_FLAGS="$C_FLAGS -O2 -m64 -mios-simulator-version-min=${{ env.MIN_IOS_VERSION  }} -isysroot ${xcode_dev_path}/Platforms/${os_platform}.platform/Developer/SDKs/${os_platform}.sdk "
+        else 
+            os_platform="iPhoneOS"  
+        fi
+
+        if [ -d "${{ env.BCG729_PATH }}/${os_platform}${{ env.MIN_IOS_VERSION  }}-${{ matrix.arch }}.sdk"] ]; then
+            rm -rf "${{ env.BCG729_PATH }}/${os_platform}${{ env.MIN_IOS_VERSION  }}-${{ matrix.arch }}.sdk" 
+        fi
+
+        if [ -d "${{ env.BCG729_PATH }}/CMakeFiles" ]; then
+            rm -rf "${{ env.BCG729_PATH }}/CMakeFiles"
+            rm -rf "${{ env.BCG729_PATH }}/CMakeCache.txt"
+        fi
+        mkdir -p "${os_platform}${{ env.MIN_IOS_VERSION  }}-${{ matrix.arch }}.sdk"        
+        cmake -DCMAKE_OSX_ARCHITECTURES=${{ matrix.arch }} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${os_platform}${{ env.MIN_IOS_VERSION  }}-${{ matrix.arch }}.sdk" -DCMAKE_SKIP_INSTALL_RPATH="ON" -DCMAKE_MAKE_PROGRAM:PATH=$(which make) -D CMAKE_C_COMPILER=`which gcc` .
+        make  || exit 
+        make install 
+        echo "artifact=${{ env.BCG729_PATH }}/${os_platform}${{ env.MIN_IOS_VERSION  }}-${{ matrix.arch }}.sdk/" >> "$GITHUB_OUTPUT"
+    - name: Upload artifactss
+      uses: actions/upload-artifact@v4
+      with:
+        name: bcg729-${{ matrix.arch }}
         path: ${{ steps.build.outputs.artifact }}
         overwrite: true
       env:
