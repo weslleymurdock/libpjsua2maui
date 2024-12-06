@@ -450,6 +450,11 @@ jobs:
         
         export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
 
+        export CC=`which clang`
+        export CXX=`which clang++`
+        echo $CC
+        echo $CXX
+        echo $CXX
         ARCH="-arch ${{ matrix.arch }} " ./configure --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
         
         make dep
