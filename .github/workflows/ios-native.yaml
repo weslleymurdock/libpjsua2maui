@@ -386,7 +386,7 @@ jobs:
     strategy:
       matrix:
         arch: [x86_64, arm64]
-    runs-on: macos-latest
+    runs-on: macos-latest-large
     needs: [bcg729, opus, openssl, openh264]
     name: Build pjsip with h264, bcg729, opus and ssl 
     permissions:
@@ -457,7 +457,7 @@ jobs:
             echo $RANLIB
             echo $LD
 
-            ARCH="-arch ${{ matrix.arch }} " ./configure --host=${{ matrix.arch }}-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
+            ARCH="-arch ${{ matrix.arch }} " ./configure --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
         
         else
 
@@ -475,7 +475,7 @@ jobs:
             echo $CC
             echo $CXX
              
-            ARCH="-arch ${{ matrix.arch }} " ./configure --host=arm-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
+            ARCH="-arch ${{ matrix.arch }} " ./configure   --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
             
         fi
         make dep
