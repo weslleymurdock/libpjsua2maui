@@ -157,7 +157,7 @@ jobs:
 
         # Prepare TARGETDIR  
         TARGETDIR="${{ env.OPENSSL_PATH}}/bin/${PLATFORM}${{env.SDKVERSION}}-${{ matrix.arch }}.sdk"
-        echo "artifact=${TARGETDIR}" >> ${{ env.BCG729_PATH }}/${os_platform}${{ env.MIN_IOS_VERSION  }}-${{ matrix.arch }}.sdk/
+        echo "artifact=${TARGETDIR}" >> ${{ env.OPENSSL_PATH }}/${os_platform}${{ env.MIN_IOS_VERSION  }}-${{ matrix.arch }}.sdk/
         mkdir -p "${TARGETDIR}"
         ## Determine config options
         # Add build target, --prefix and prevent async (references to getcontext(),
@@ -340,7 +340,7 @@ jobs:
     - name: Install deps
       run: |
         brew install nasm autoconf automake libtool swig
-        shell: sh
+      shell: sh
             
     - name: Build bcg729
       id: build
@@ -371,6 +371,7 @@ jobs:
         make  || exit 
         make install 
         echo "artifact=${{ env.BCG729_PATH }}/${os_platform}${{ env.MIN_IOS_VERSION  }}-${{ matrix.arch }}.sdk/" >> "$GITHUB_OUTPUT"
+    
     - name: Upload artifactss
       uses: actions/upload-artifact@v4
       with:
