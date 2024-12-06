@@ -151,13 +151,13 @@ jobs:
         #ARCH=$(echo "${TARGET}" | sed -E 's|^.*\-([^\-]+)$|\1|g')
         ARCH=${{ matrix.arch }}
         # Cross compile references, see Configurations/10-main.conf
-        export CROSS_COMPILE="${{ env.DEVELOPER}}/Toolchains/XcodeDefault.xctoolchain/usr/bin/"
+        export CROSS_COMPILE="${{ env.DEVELOPER }}/Toolchains/XcodeDefault.xctoolchain/usr/bin/"
         export CROSS_TOP="${{ env.DEVELOPER }}/Platforms/${PLATFORM}.platform/Developer"
-        export CROSS_SDK="${PLATFORM}${{env.SDKVERSION}}.sdk"
+        export CROSS_SDK="${PLATFORM}${{ env.SDKVERSION }}.sdk"
 
         # Prepare TARGETDIR  
-        TARGETDIR="${{ env.OPENSSL_PATH}}/bin/${PLATFORM}${{env.SDKVERSION}}-${{ matrix.arch }}.sdk"
-        echo "artifact=${TARGETDIR}" >> ${{ env.OPENSSL_PATH }}/${os_platform}${{ env.MIN_IOS_VERSION  }}-${{ matrix.arch }}.sdk/
+        TARGETDIR="${{ env.OPENSSL_PATH }}/bin/${PLATFORM}${{env.SDKVERSION}}-${{ matrix.arch }}.sdk"
+        echo "artifact=${TARGETDIR}" >> "$GITHUB_OUTPUT"
         mkdir -p "${TARGETDIR}"
         ## Determine config options
         # Add build target, --prefix and prevent async (references to getcontext(),
