@@ -430,8 +430,8 @@ jobs:
           brew install llvm
         fi
       shell: sh
-           
 
+      
     - name: Build pjsip
       id: build
       run: |
@@ -457,8 +457,7 @@ jobs:
             export CFLAGS="-arch ${{ matrix.arch }} -O2 -m64 -mios-simulator-version-min=${{ env.MIN_IOS_VERSION }} -I${{ github.workspace }}/libs/bcg729/include -I${{ github.workspace }}/libs/ssl/include -I${{ github.workspace }}/libs/opus/include -I${{ github.workspace }}/libs/h264/include"
             export LDFLAGS="-arch ${{ matrix.arch }} -O2 -m64 -mios-simulator-version-min=${{ env.MIN_IOS_VERSION }} -L${{ github.workspace }}/libs/bcg729/lib -L${{ github.workspace }}/libs/ssl/lib -L${{ github.workspace }}/libs/opus/lib -L${{ github.workspace }}/libs/h264/lib"
             export MIN_IOS="-mios-simulator-version-min=${{ env.MIN_IOS_VERSION }}"
-        
-            export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
+         
             ARCH="-arch ${{ matrix.arch }}" ./configure  --host=${{ matrix.arch }}-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/  || cat *config.log
             make dep
 
@@ -473,8 +472,8 @@ jobs:
             export LDFLAGS="-arch ${{ matrix.arch }} -L${{ github.workspace }}/libs/bcg729/lib -L${{ github.workspace }}/libs/ssl/lib -L${{ github.workspace }}/libs/opus/lib -L${{ github.workspace }}/libs/h264/lib"
             export MIN_IOS="-miphoneos-version-min=${{ env.MIN_IOS_VERSION  }}"
             
-            export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
-    
+            export LDFLAGS="${LDFLAGS} -L$(find /Applications/Xcode_16.1.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs -name AudioUnit.framework -print0 | xargs -0 dirname) -framework AudioUnit"
+
             export CC=`which clang`
             export CXX=`which clang++`
             echo $CC
@@ -591,6 +590,7 @@ jobs:
             export MIN_IOS="-miphoneos-version-min=${{ env.MIN_IOS_VERSION  }}"    
             export CC=`which clang`
             export CXX=`which clang++`
+            export LDFLAGS="${LDFLAGS} -L$(find /Applications/Xcode_16.1.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs -name AudioUnit.framework -print0 | xargs -0 dirname) -framework AudioUnit"
             echo $CC
             echo $CXX
              
