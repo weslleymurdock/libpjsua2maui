@@ -590,7 +590,7 @@ jobs:
             export MIN_IOS="-miphoneos-version-min=${{ env.MIN_IOS_VERSION  }}"    
             
              
-            ARCH="-arch ${{ matrix.arch }} " ./configure  || cat *config.log
+            ARCH="-arch ${{ matrix.arch }} " ./configure --host=arm64-apple-darwin || cat *config.log
             
             make dep
 
