@@ -588,13 +588,9 @@ jobs:
             export CFLAGS="-arch ${{ matrix.arch }} -miphoneos-version-min=${{ env.MIN_IOS_VERSION  }} "
             export LDFLAGS="-arch ${{ matrix.arch }}"
             export MIN_IOS="-miphoneos-version-min=${{ env.MIN_IOS_VERSION  }}"    
-            export CC=`which clang`
-            export CXX=`which clang++`
-            export LDFLAGS="${LDFLAGS} -L$(find /Applications/Xcode_16.1.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs -name AudioUnit.framework -print0 | xargs -0 dirname) -framework AudioUnit"
-            echo $CC
-            echo $CXX
+            
              
-            ARCH="-arch ${{ matrix.arch }} " ./configure  --host=arm-apple-darwin  || cat *config.log
+            ARCH="-arch ${{ matrix.arch }} " ./configure  || cat *config.log
             
             make dep
 
