@@ -441,22 +441,32 @@ jobs:
             export CFLAGS="-O2 -m64 -mios-simulator-version-min=${{ env.MIN_IOS_VERSION }} -I${{ github.workspace }}/libs/bcg729/include -I${{ github.workspace }}/libs/ssl/include -I${{ github.workspace }}/libs/opus/include -I${{ github.workspace }}/libs/h264/include"
             export LDFLAGS="-O2 -m64 -mios-simulator-version-min=${{ env.MIN_IOS_VERSION }} -L${{ github.workspace }}/libs/bcg729/lib -L${{ github.workspace }}/libs/ssl/lib -L${{ github.workspace }}/libs/opus/lib -L${{ github.workspace }}/libs/h264/lib"
             export MIN_IOS="-mios-simulator-version-min=${{ env.MIN_IOS_VERSION }}"
+        
+            export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
+    
+            export CC=`which clang`
+            export CXX=`which clang++`
+            echo $CC
+            echo $CXX
+            echo $CXX
+            ARCH="-arch ${{ matrix.arch }} " ./configure --host=x86_64-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
+        
         else
             export DEVPATH="`xcrun -sdk iphoneos --show-sdk-platform-path`/Developer"
             export CFLAGS="-miphoneos-version-min=${{ env.MIN_IOS_VERSION  }} -I${{ github.workspace }}/libs/bcg729/include -I${{ github.workspace }}/libs/ssl/include -I${{ github.workspace }}/libs/opus/include -I${{ github.workspace }}/libs/h264/include"
             export LDFLAGS="-L${{ github.workspace }}/libs/bcg729/lib -L${{ github.workspace }}/libs/ssl/lib -L${{ github.workspace }}/libs/opus/lib -L${{ github.workspace }}/libs/h264/lib"
             export MIN_IOS="-miphoneos-version-min=${{ env.MIN_IOS_VERSION  }}"
+            
+            export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
+    
+            export CC=`which clang`
+            export CXX=`which clang++`
+            echo $CC
+            echo $CXX
+            echo $CXX
+            ARCH="-arch ${{ matrix.arch }} " ./configure --host=arm-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
+            
         fi
-        
-        export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
-
-        export CC=`which clang`
-        export CXX=`which clang++`
-        echo $CC
-        echo $CXX
-        echo $CXX
-        ARCH="-arch ${{ matrix.arch }} " ./configure --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
-        
         make dep
         
         make 
