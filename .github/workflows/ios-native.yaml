@@ -244,7 +244,7 @@ jobs:
     - name: Build opus
       id: build
       run: |
-        opus_version="1.5.2"
+        opus_version="1.4"
         opus_opt_cflags="-Ofast -flto -g"
         opus_opt_ldflags="-flto"
         opus_opt_config_args=""
