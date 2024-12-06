@@ -445,18 +445,8 @@ jobs:
             export MIN_IOS="-mios-simulator-version-min=${{ env.MIN_IOS_VERSION }}"
         
             export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
-            export PATH=$PATH:/usr/local/opt/llvm/bin
-            export CC=`which clang` 
-            export CXX=`which clang++`
-            export AR=/usr/bin/ar 
-            export RANLIB=/usr/bin/ranlib
-            export LD=/usr/bin/ld
-            echo $CC
-            echo $CXX 
-            echo $AR
-            echo $RANLIB
-            echo $LD
-            clang -print-targets
+            export PATH=/usr/local/opt/llvm/bin:$PATH
+            export CC=clang 
             ARCH="-arch ${{ matrix.arch }} " ./configure  --host=${{ matrix.arch }}-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/  || cat *config.log
         
         else
