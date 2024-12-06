@@ -29,7 +29,7 @@ jobs:
       matrix:
         arch: [x86_64, arm64]
     runs-on: macos-latest
-    name: Build OpenH264 
+    name: openh264 
     permissions:
       contents: write
     steps:
@@ -94,7 +94,7 @@ jobs:
       matrix:
         arch: [x86_64, arm64]
     runs-on: macos-latest
-    name: Build OpenSSL 
+    name: openssl 
     permissions:
       contents: write
     steps:
@@ -216,7 +216,7 @@ jobs:
       matrix:
         arch: [x86_64, arm64]
     runs-on: macos-latest
-    name: Build Opus 
+    name: opus 
     permissions:
       contents: write
     steps:
@@ -317,7 +317,7 @@ jobs:
       matrix:
         arch: [x86_64, arm64]
     runs-on: macos-latest
-    name: Build BCG729 
+    name: bcg729 
     permissions:
         contents: write
     steps:
@@ -382,13 +382,13 @@ jobs:
         SDKVERSION: 18.1
 
 
-  pjsip:
+  pjsip-h264-opus-bcg729-ssl:
     strategy:
       matrix:
         arch: [x86_64, arm64]
     runs-on: macos-14
     needs: [bcg729, openh264, openssl, opus]
-    name: Build pjsip with h264, bcg729, opus and ssl 
+    name: pjsip + h264 + bcg729 + opus + ssl 
     permissions:
         contents: write
     steps:
@@ -457,6 +457,125 @@ jobs:
             export LDFLAGS="-arch ${{ matrix.arch }} -O2 -m64 -mios-simulator-version-min=${{ env.MIN_IOS_VERSION }} -L${{ github.workspace }}/libs/bcg729/lib -L${{ github.workspace }}/libs/ssl/lib -L${{ github.workspace }}/libs/opus/lib -L${{ github.workspace }}/libs/h264/lib"
             export MIN_IOS="-mios-simulator-version-min=${{ env.MIN_IOS_VERSION }}"
         
+            export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
+            ARCH="-arch ${{ matrix.arch }}" ./configure  --host=${{ matrix.arch }}-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/  || cat *config.log
+            make dep
+
+            make  
+        else
+
+            export DEVPATH="$(xcode-select -p)/Platforms/iPhoneOS.platform/Developer"
+            echo $DEVPATH
+            export SDKROOT=$(xcode-select -p)/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
+
+            export CFLAGS="-arch ${{ matrix.arch }} -miphoneos-version-min=${{ env.MIN_IOS_VERSION  }} -I${{ github.workspace }}/libs/bcg729/include -I${{ github.workspace }}/libs/ssl/include -I${{ github.workspace }}/libs/opus/include -I${{ github.workspace }}/libs/h264/include"
+            export LDFLAGS="-arch ${{ matrix.arch }} -L${{ github.workspace }}/libs/bcg729/lib -L${{ github.workspace }}/libs/ssl/lib -L${{ github.workspace }}/libs/opus/lib -L${{ github.workspace }}/libs/h264/lib"
+            export MIN_IOS="-miphoneos-version-min=${{ env.MIN_IOS_VERSION  }}"
+            
+            export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
+    
+            export CC=`which clang`
+            export CXX=`which clang++`
+            echo $CC
+            echo $CXX
+             
+            ARCH="-arch ${{ matrix.arch }} " ./configure  --host=arm-apple-darwin  --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/   || cat *config.log
+            
+            make dep
+
+            make 
+        fi
+        
+
+        cd ./pjsip-apps/src/swig 
+
+        sed -i'' -e 's/xamarin/maui/g' ./csharp/Makefile
+        
+        make 
+
+        mkdir -p ${{ github.workspace }}/pjsip-${{matrix.arch}}/lib
+        mkdir -p ${{ github.workspace }}/pjsip-${{matrix.arch}}/cs
+
+        cp -v -f ${{ github.workspace }}/libs/ssl/lib/*.a ${{ github.workspace }}/pjsip-${{matrix.arch}}/lib
+        cp -v -f ${{ github.workspace }}/libs/opus/lib/*.a ${{ github.workspace }}/pjsip-${{matrix.arch}}/lib
+        cp -v -f ${{ github.workspace }}/libs/bcg729/lib/*.a ${{ github.workspace }}/pjsip-${{matrix.arch}}/lib
+        cp -v -f ${{ github.workspace }}/libs/h264/lib/*.a ${{ github.workspace }}/pjsip-${{matrix.arch}}/lib
+
+        cp -v -f ./csharp/pjsua2maui/pjsua2maui/*.cs ${{ github.workspace }}/pjsip-${{matrix.arch}}/cs
+
+        echo "artifact=${{ github.workspace }}/pjsip-${{matrix.arch}}" >> "$GITHUB_OUTPUT"
+
+    - name: Upload artifactss
+      uses: actions/upload-artifact@v4
+      with:
+        name: pjsip-${{ matrix.arch }}
+        path: ${{ steps.build.outputs.artifact }}
+        overwrite: true
+      env:
+        SDKVERSION: 18.1
+
+
+  pjsip:
+    strategy:
+      matrix:
+        arch: [x86_64, arm64]
+    runs-on: macos-latest
+    name: pjsip 
+    permissions:
+        contents: write
+    steps:
+        
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: 'true'
+                
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+    
+    - name: Install deps
+      run: |
+        brew install nasm autoconf automake libtool swig 
+        if [ "${{ matrix.arch }}" == "x86_64" ]; then
+          brew install llvm
+        fi
+      shell: sh
+           
+
+    - name: Build pjsip
+      id: build
+      run: |
+        cp -v -f ${{ github.workspace }}/res/pj/config_site.h ${{ env.PJSIP_PATH }}/pjlib/include/pj/config_site.h
+        
+        sed -i'' -e 's/PJMEDIA_HAS_VIDEO 1/PJMEDIA_HAS_VIDEO 0/g' ${{ env.PJSIP_PATH }}/pjlib/include/pj/config_site.h
+        sed -i'' -e 's/PJMEDIA_HAS_OPENH264_CODEC 1/PJMEDIA_HAS_OPENH264_CODEC 0/g' ${{ env.PJSIP_PATH }}/pjlib/include/pj/config_site.h
+        sed -i'' -e 's/PJMEDIA_VIDEO_DEV_HAS_OPENGL 1/PJMEDIA_VIDEO_DEV_HAS_OPENGL 0/g' ${{ env.PJSIP_PATH }}/pjlib/include/pj/config_site.h
+        sed -i'' -e 's/PJMEDIA_VIDEO_DEV_HAS_OPENGL_ES 1/PJMEDIA_VIDEO_DEV_HAS_OPENGL_ES 0/g' ${{ env.PJSIP_PATH }}/pjlib/include/pj/config_site.h
+        sed -i'' -e 's/PJMEDIA_HAS_OPUS_CODEC 1/PJMEDIA_HAS_OPUS_CODEC 0/g' ${{ env.PJSIP_PATH }}/pjlib/include/pj/config_site.h
+        sed -i'' -e 's/PJMEDIA_HAS_BCG729 1/PJMEDIA_HAS_BCG729 0/g' ${{ env.PJSIP_PATH }}/pjlib/include/pj/config_site.h
+        
+        cd ${{ env.PJSIP_PATH }}
+
+        if [ "${{ matrix.arch }}" == "x86_64" ]; then
+            export DEVPATH="$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer"
+            export ISYSROOT=$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
+            export SDKROOT=$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
+
+            echo $DEVPATH
+            echo $ISYSROOT
+            export PATH="/opt/homebrew/opt/llvm/bin:$PATH" 
+            export CC="/opt/homebrew/opt/llvm/bin/clang -isysroot $SDKROOT" 
+            export CXX="/opt/homebrew/opt/llvm/bin/clang++ -isysroot $SDKROOT"
+            export AR="/opt/homebrew/opt/llvm/bin/llvm-ar -isysroot $SDKROOT"
+            export RANLIB="/opt/homebrew/opt/llvm/bin/llvm-ranlib -isysroot $SDKROOT"
+            export LD="/opt/homebrew/opt/llvm/bin/ld.lld -isysroot $SDKROOT"
+
+            export CFLAGS="-arch ${{ matrix.arch }} -O2 -m64 -mios-simulator-version-min=${{ env.MIN_IOS_VERSION }} -I${{ github.workspace }}/libs/bcg729/include -I${{ github.workspace }}/libs/ssl/include -I${{ github.workspace }}/libs/opus/include -I${{ github.workspace }}/libs/h264/include"
+            export LDFLAGS="-arch ${{ matrix.arch }} -O2 -m64 -mios-simulator-version-min=${{ env.MIN_IOS_VERSION }} -L/opt/homebrew/opt/llvm/lib -L${{ github.workspace }}/libs/bcg729/lib -L${{ github.workspace }}/libs/ssl/lib -L${{ github.workspace }}/libs/opus/lib -L${{ github.workspace }}/libs/h264/lib"
+            export MIN_IOS="-mios-simulator-version-min=${{ env.MIN_IOS_VERSION }}"
+            export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
             export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
             ARCH="-arch ${{ matrix.arch }}" ./configure  --host=${{ matrix.arch }}-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/  || cat *config.log
             make dep
