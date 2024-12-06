@@ -562,7 +562,7 @@ jobs:
             export DEVPATH="$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer"
             export ISYSROOT=$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
             export SDKROOT=$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
-
+            softwareupdate --install-rosetta
             echo $DEVPATH
             echo $ISYSROOT
             export PATH="/opt/homebrew/opt/llvm/bin:$PATH" 
