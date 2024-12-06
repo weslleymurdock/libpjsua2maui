@@ -386,8 +386,7 @@ jobs:
     strategy:
       matrix:
         arch: [x86_64, arm64]
-    runs-on: macos-latest-large
-    needs: [bcg729, opus, openssl, openh264]
+    runs-on: macos-14-large
     name: Build pjsip with h264, bcg729, opus and ssl 
     permissions:
         contents: write
