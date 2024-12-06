@@ -2,8 +2,8 @@ name: release .nupkg's
 
 on:
   push:
-    tags: 
-        '*' 
+    branches:  
+    - main 
 permissions:
   contents: read
 
