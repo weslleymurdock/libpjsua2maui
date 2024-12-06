@@ -425,7 +425,7 @@ jobs:
     
     - name: Install deps
       run: |
-        brew install nasm autoconf automake libtool swig
+        brew install nasm autoconf automake libtool swig llvm
       shell: sh
            
 
@@ -444,12 +444,18 @@ jobs:
         
             export LDFLAGS="${LDFLAGS} -lstdc++ -ld_classic"
     
-            export CC=`which clang`
-            export CXX=`which clang++`
+            export CC=/usr/local/opt/llvm/bin/clang 
+            export CXX=/usr/local/opt/llvm/bin/clang++
+            export AR=/usr/bin/ar 
+            export RANLIB=/usr/bin/ranlib
+            export LD=/usr/bin/ld
             echo $CC
-            echo $CXX
-            echo $CXX
-            ARCH="-arch ${{ matrix.arch }} " ./configure --host=x86_64-apple-darwin --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
+            echo $CXX 
+            echo $AR
+            echo $RANLIB
+            echo LD
+            
+            ARCH="-arch ${{ matrix.arch }} " ./configure --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/ 
         
         else
             export DEVPATH="`xcrun -sdk iphoneos --show-sdk-platform-path`/Developer"
