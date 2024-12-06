@@ -474,12 +474,12 @@ jobs:
             
             export LDFLAGS="${LDFLAGS} -L$(find /Applications/Xcode_16.1.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs -name AudioUnit.framework -print0 | xargs -0 dirname) -framework AudioUnit"
 
-            export CC=`which clang`
-            export CXX=`which clang++`
+            #export CC=`which clang`
+            #export CXX=`which clang++`
             echo $CC
             echo $CXX
              
-            ARCH="-arch ${{ matrix.arch }} " ./configure  --host=arm-apple-darwin  --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/   || cat *config.log
+            ARCH="-arch ${{ matrix.arch }} " ./configure-iphone  --with-bcg729=${{ github.workspace }}/libs/bcg729/ --with-ssl=${{ github.workspace }}/libs/ssl/ --with-opus=${{ github.workspace }}/libs/opus/ --with-openh264=${{ github.workspace }}/libs/h264/   || cat *config.log
             
             make dep
 
