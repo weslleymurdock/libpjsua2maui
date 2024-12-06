@@ -442,6 +442,8 @@ jobs:
         if [ "${{ matrix.arch }}" == "x86_64" ]; then
             export DEVPATH="$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer"
             export ISYSROOT=$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
+            export SDKROOT=$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
+
             echo $DEVPATH
             echo $ISYSROOT
             export PATH="/opt/homebrew/opt/llvm/bin:$PATH" 
@@ -464,6 +466,7 @@ jobs:
 
             export DEVPATH="$(xcode-select -p)/Platforms/iPhoneOS.platform/Developer"
             echo $DEVPATH
+            export SDKROOT=$(xcode-select -p)/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
 
             export CFLAGS="-arch ${{ matrix.arch }} -miphoneos-version-min=${{ env.MIN_IOS_VERSION  }} -I${{ github.workspace }}/libs/bcg729/include -I${{ github.workspace }}/libs/ssl/include -I${{ github.workspace }}/libs/opus/include -I${{ github.workspace }}/libs/h264/include"
             export LDFLAGS="-arch ${{ matrix.arch }} -L${{ github.workspace }}/libs/bcg729/lib -L${{ github.workspace }}/libs/ssl/lib -L${{ github.workspace }}/libs/opus/lib -L${{ github.workspace }}/libs/h264/lib"
@@ -480,9 +483,10 @@ jobs:
             
             make dep
 
-            make
+            make CXXFLAGS="-isysroot $SDKROOT" LDFLAGS="-isysroot $SDKROOT"
         fi
         
+
         cd ./pjsip-apps/src/swig 
 
         sed -i'' -e 's/xamarin/maui/g' ./csharp/Makefile
