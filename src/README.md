@@ -1,9 +1,9 @@
 # libpjsua2maui - pjsip bindings for .NET MAUI
 
-[![[RELEASE] Build pjsip nuget package for .NET MAUI](https://github.com/weslleymurdock/libpjsua2maui/actions/workflows/build-package.yaml/badge.svg)](https://github.com/weslleymurdock/libpjsua2maui/actions/workflows/build-package.yaml)
+[![[RELEASE] Build nuget package](https://github.com/remotecodehub/libpjsua2maui/actions/workflows/package.yml/badge.svg)](https://github.com/remotecodehub/libpjsua2maui/actions/workflows/package.yml)
 
 This package contains the Android and iOS bindings of pjsip library for use in .NET MAUI apps.
-The binded pjsip version is 2.16, and the native bindings offer support for third party libs such as bcg729, openh264, openssl and opus.
+The binded pjsip version is 2.17, and the native bindings offer support for third party libs such as bcg729, openh264, openssl and opus.
 
 ## Download
 
