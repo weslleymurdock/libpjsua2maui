@@ -30,9 +30,7 @@ RUN mkdir -p $ANDROID_SDK_ROOT/ndk \
 # Clone
 RUN mkdir -p /root/build \
     && cd /root/build \
-    && git clone https://gitlab.linphone.org/BC/public/bcg729.git \
-    && cd bcg729 \
-    && git checkout tags/1.1.1 -b v1.1.1
+    &&  git clone --branch 1.1.1 --depth 1 https://github.com/BelledonneCommunications/bcg729.git 
 
 WORKDIR /root/build/bcg729
 

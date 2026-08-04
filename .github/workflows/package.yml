@@ -2818,7 +2818,13 @@ jobs:
         if: |
           steps.cache-libs.outputs.cache-hit != 'true' &&
           github.event_name == 'pull_request' &&
-          github.event.action == 'opened'
+          (
+            github.event.action == 'opened' ||
+            (
+              github.event.action == 'synchronize' &&
+              startsWith(github.event.head_commit.message, 'bot:')
+            )
+          )
         shell: bash
         run: |
             set -e
