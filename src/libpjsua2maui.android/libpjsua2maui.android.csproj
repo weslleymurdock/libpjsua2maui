@@ -46,7 +46,7 @@ https://github.com/remotecodehub/libpjsua2maui/blob/main/README.md and
 https://github.com/remotecodehub/libpjsua2maui/blob/main/CHANGELOG.md
 		</Description>
 		<PackageProjectUrl>https://github.com/remotecodehub/libpjsua2maui</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/remotecodehub/libpjsua2maui/libpjsua2maui.git</RepositoryUrl>
+		<RepositoryUrl>https://github.com/remotecodehub/libpjsua2maui.git</RepositoryUrl>
 	</PropertyGroup>
 		
 	<ItemGroup>

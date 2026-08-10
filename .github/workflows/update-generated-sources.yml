@@ -1,0 +1,145 @@
+name: Update generated SWIG sources
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  update-sources:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait for Package Build
+        id: package-run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for attempt in {1..90}; do
+            RUN=$(gh run list \
+              --workflow package.yml \
+              --branch "$BRANCH" \
+              --limit 20 \
+              --json databaseId,status,conclusion,headSha,event \
+              --jq "[.[] | select(.headSha == \"$HEAD_SHA\")] | .[0]")
+
+            if [ -n "$RUN" ] && [ "$RUN" != "null" ]; then
+              RUN_ID=$(jq -r '.databaseId' <<< "$RUN")
+              STATUS=$(jq -r '.status' <<< "$RUN")
+              CONCLUSION=$(jq -r '.conclusion // ""' <<< "$RUN")
+              echo "Package Build run $RUN_ID: $STATUS / $CONCLUSION"
+
+              if [ "$STATUS" = "completed" ]; then
+                echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+            else
+              echo "Package Build for $HEAD_SHA is not visible yet."
+            fi
+
+            sleep 20
+          done
+
+          echo "Timed out waiting for Package Build."
+          exit 1
+
+      - name: Checkout pull request branch
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Download Android bindings
+        uses: actions/download-artifact@v8
+        with:
+          name: pjsip-2.17-android-arm64-v8a
+          path: ${{ runner.temp }}/artifacts/android
+          run-id: ${{ steps.package-run.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download iOS bindings
+        uses: actions/download-artifact@v8
+        with:
+          name: pjsip-2.17-iPhoneOS26.2-arm64.sdk
+          path: ${{ runner.temp }}/artifacts/ios
+          run-id: ${{ steps.package-run.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download Mac Catalyst bindings
+        uses: actions/download-artifact@v8
+        with:
+          name: pjsip-2.17-MacOSX26.2-arm64.sdk
+          path: ${{ runner.temp }}/artifacts/mac
+          run-id: ${{ steps.package-run.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download Windows bindings
+        uses: actions/download-artifact@v8
+        with:
+          name: pjsip-2.17-Win-x64
+          path: ${{ runner.temp }}/artifacts/win
+          run-id: ${{ steps.package-run.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Synchronize generated bindings
+        shell: bash
+        env:
+          ARTIFACTS: ${{ runner.temp }}/artifacts
+        run: |
+          set -euo pipefail
+
+          mkdir -p \
+            src/libpjsua2.android.so/org/pjsip \
+            src/libpjsua2maui.android/pjsua2maui/pjsua2 \
+            src/libpjsua2maui.ios/pjsua2maui/pjsua2 \
+            src/libpjsua2maui.mac/pjsua2maui/pjsua2 \
+            src/libpjsua2maui.win/pjsua2maui/pjsua2
+
+          cp -f "$ARTIFACTS/android"/java/*.java src/libpjsua2.android.so/org/pjsip/
+          cp -f "$ARTIFACTS/android"/csharp/*.cs src/libpjsua2maui.android/pjsua2maui/pjsua2/
+          cp -f "$ARTIFACTS/ios"/cs/*.cs src/libpjsua2maui.ios/pjsua2maui/pjsua2/
+          cp -f "$ARTIFACTS/mac"/cs/*.cs src/libpjsua2maui.mac/pjsua2maui/pjsua2/
+          cp -f "$ARTIFACTS/win"/pjsua2/*.cs src/libpjsua2maui.win/pjsua2maui/pjsua2/
+
+      - name: Commit generated bindings
+        id: commit
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add \
+            src/libpjsua2.android.so/org/pjsip/*.java \
+            src/libpjsua2maui.android/pjsua2maui/pjsua2/*.cs \
+            src/libpjsua2maui.ios/pjsua2maui/pjsua2/*.cs \
+            src/libpjsua2maui.mac/pjsua2maui/pjsua2/*.cs \
+            src/libpjsua2maui.win/pjsua2maui/pjsua2/*.cs
+
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Generated bindings are already synchronized."
+            exit 0
+          fi
+
+          git commit -m "feat: Update generated SWIG bindings"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger package rebuild with synchronized sources
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          gh workflow run package.yml --ref "$BRANCH"
