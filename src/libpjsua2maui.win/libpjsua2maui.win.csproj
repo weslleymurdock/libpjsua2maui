@@ -9,7 +9,9 @@
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 	    <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
     </PropertyGroup>
-
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+    </ItemGroup>
     <PropertyGroup>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -23,9 +25,9 @@
  
     <PropertyGroup>
         <PackageId>libpjsua2maui.win</PackageId>
-        <Version>2.17.0.1</Version>
-        <AssemblyVersion>2.17.0.1</AssemblyVersion>
-        <FileVersion>2.17.0.1</FileVersion>
+        <Version>2.17.0.2</Version>
+        <AssemblyVersion>2.17.0.2</AssemblyVersion>
+        <FileVersion>2.17.0.2</FileVersion>
         <Title>PJSIP bindings for .NET MAUI</Title>
         <Authors>Weslley Murdock</Authors>
         <Company>Remote Code Hub</Company>
@@ -62,4 +64,9 @@ https://github.com/remotecodehub/libpjsua2maui/blob/main/CHANGELOG.md
             <Pack>True</Pack>
         </None>
 	</ItemGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>portable</DebugType>
+	</PropertyGroup>
 </Project>

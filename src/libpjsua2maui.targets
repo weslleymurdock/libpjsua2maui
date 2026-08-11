@@ -39,6 +39,11 @@
   <!-- Android Java Bindings -->
   <ItemGroup Condition="$(TargetFramework.Contains('android'))">
     <AndroidJavaSource
+      Include="$(NuGetPathUnix)libpjsua2maui/$(LibVersion)/contentFiles/any/android/org/pjsip/PjAudioDevInfo.java">
+      <Link>Platforms/Android/org/pjsip/%(Filename)%(Extension)</Link>
+      <Bind />
+    </AndroidJavaSource>
+    <AndroidJavaSource
       Include="$(NuGetPathUnix)libpjsua2maui/$(LibVersion)/contentFiles/any/android/org/pjsip/PjCamera.java">
       <Link>Platforms/Android/org/pjsip/%(Filename)%(Extension)</Link>
       <Bind />
