@@ -2857,6 +2857,18 @@ jobs:
           mkdir -p ${{ github.workspace }}/src/libpjsua2.mac.a/lib/x86_64
           mkdir -p ${{ github.workspace }}/src/libpjsua2.win/bin/x64/ 
           mkdir -p ${{ github.workspace }}/src/libpjsua2.win/bin/arm64/ 
+          mkdir -p ${{ github.workspace }}/src/libpjsua2maui.android/pjsua2maui/pjsua2
+          mkdir -p ${{ github.workspace }}/src/libpjsua2maui.android/org/pjsip
+          mkdir -p ${{ github.workspace }}/src/libpjsua2maui.ios/pjsua2maui/pjsua2
+          mkdir -p ${{ github.workspace }}/src/libpjsua2maui.mac/pjsua2maui/pjsua2
+          mkdir -p ${{ github.workspace }}/src/libpjsua2maui.win/pjsua2maui/pjsua2
+
+          # Move managed classes to projects directory
+          cp -v ${{ env.ARTIFACTS }}/pjsip-${{ env.PJSIP_VERSION }}-android-x86/java/*.java ${{ github.workspace }}/src/libpjsua2maui.android/org/pjsip
+          cp -v ${{ env.ARTIFACTS }}/pjsip-${{ env.PJSIP_VERSION }}-android-x86/csharp/*.cs ${{ github.workspace }}/src/libpjsua2maui.android/pjsua2maui/pjsua2
+          cp -v ${{ env.ARTIFACTS }}/pjsip-${{ env.PJSIP_VERSION }}-iPhoneSimulator${{ env.SDKVERSION }}-x86_64.sdk/cs/*.cs ${{ github.workspace }}/src/libpjsua2maui.ios/pjsua2maui/pjsua2
+          cp -v ${{ env.ARTIFACTS }}/pjsip-${{ env.PJSIP_VERSION }}-MacOSX${{ env.SDKVERSION }}-x86_64.sdk/cs/*.cs ${{ github.workspace }}/src/libpjsua2maui.mac/pjsua2maui/pjsua2
+          cp -v ${{ env.ARTIFACTS }}/pjsip-${{ env.PJSIP_VERSION }}-Win-x64/pjsua2/*.cs ${{ github.workspace }}/src/libpjsua2maui.win/pjsua2maui/pjsua2
 
           # Move android libs to packaging directory
           cp -v ${{ env.ARTIFACTS }}/pjsip-${{ env.PJSIP_VERSION }}-android-x86/lib/lib*.so ${{ github.workspace }}/src/libpjsua2.android.so/lib/x86
