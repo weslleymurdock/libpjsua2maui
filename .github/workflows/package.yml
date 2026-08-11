@@ -2708,7 +2708,7 @@ jobs:
   nupkg:
     runs-on: macos-26
     name: libpjsua2.nupkg
-    needs: [synchronize-swig-sources]
+    needs: [pjsip-android, pjsip-ios, pjsip-mac, pjsip-win]
     permissions:
       id-token: write
       contents: write
