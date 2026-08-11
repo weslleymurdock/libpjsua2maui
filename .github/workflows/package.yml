@@ -2931,9 +2931,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: NuGet/login@v1 
         with:
-          user: ${{ env.USERNAME }}  
-        env:
-          USERNAME: ${{ secrets.USER_NAME }}
+          user: weslleyluiz
 
       - name: Pack NuGet Package
         if: steps.cache-libs.outputs.cache-hit != 'true'
