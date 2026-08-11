@@ -74,8 +74,6 @@ android devices (arm64-v8a, armeabi-v7a) and android simulators (x86, x86_64).
         <file src="libpjsua2.win\bin\arm64\pjsua2.dll"
             target="runtimes\win-arm64\native\pjsua2.dll" />
 
-        <file src="libpjsua2.android.so\org\pjsip\*" target="contentFiles\any\android\org\pjsip\" />
-
         <file src="libpjsua2maui.mac\bin\Release\net10.0-maccatalyst\pjsua2maui.mac.dll"
             target="lib\net10.0-maccatalyst26.2\" />
         <file src="libpjsua2maui.mac\bin\Release\net10.0-maccatalyst\pjsua2maui.mac.dll"
@@ -85,7 +83,9 @@ android devices (arm64-v8a, armeabi-v7a) and android simulators (x86, x86_64).
             target="lib\net10.0-ios26.2\" />
         <file src="libpjsua2maui.ios\bin\Release\net10.0-ios\pjsua2maui.ios.dll"
             target="ref\net10.0-ios26.2\" />
-            
+
+        <file src="libpjsua2maui.android\org\pjsip\*" target="contentFiles\any\android\org\pjsip\" />
+        
         <file src="libpjsua2maui.android\bin\Release\net10.0-android\pjsua2maui.android.dll"
             target="lib\net10.0-android36.0\" />
         <file src="libpjsua2maui.android\bin\Release\net10.0-android\pjsua2maui.android.dll"

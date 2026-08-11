@@ -2672,13 +2672,13 @@ jobs:
       - name: Prepare Dirs
         run: |
           mkdir -p ${{ github.workspace }}/src/libpjsua2maui.android/pjsua2maui/pjsua2
-          mkdir -p ${{ github.workspace }}/src/libpjsua2.android.so/org/pjsip
+          mkdir -p ${{ github.workspace }}/src/libpjsua2maui.android/org/pjsip
           mkdir -p ${{ github.workspace }}/src/libpjsua2maui.ios/pjsua2maui/pjsua2
           mkdir -p ${{ github.workspace }}/src/libpjsua2maui.mac/pjsua2maui/pjsua2
           mkdir -p ${{ github.workspace }}/src/libpjsua2maui.win/pjsua2maui/pjsua2
 
           # Move managed classes to projects directory
-          cp -v ${{ env.ARTIFACTS }}/pjsip-${{ env.PJSIP_VERSION }}-android-x86/java/*.java ${{ github.workspace }}/src/libpjsua2.android.so/org/pjsip
+          cp -v ${{ env.ARTIFACTS }}/pjsip-${{ env.PJSIP_VERSION }}-android-x86/java/*.java ${{ github.workspace }}/src/libpjsua2maui.android/org/pjsip
           cp -v ${{ env.ARTIFACTS }}/pjsip-${{ env.PJSIP_VERSION }}-android-x86/csharp/*.cs ${{ github.workspace }}/src/libpjsua2maui.android/pjsua2maui/pjsua2
           cp -v ${{ env.ARTIFACTS }}/pjsip-${{ env.PJSIP_VERSION }}-iPhoneSimulator${{ env.SDKVERSION }}-x86_64.sdk/cs/*.cs ${{ github.workspace }}/src/libpjsua2maui.ios/pjsua2maui/pjsua2
           cp -v ${{ env.ARTIFACTS }}/pjsip-${{ env.PJSIP_VERSION }}-MacOSX${{ env.SDKVERSION }}-x86_64.sdk/cs/*.cs ${{ github.workspace }}/src/libpjsua2maui.mac/pjsua2maui/pjsua2
@@ -2692,7 +2692,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             echo "Adding generated C# files..."
             git add \
-              src/libpjsua2.android.so/org/pjsip/*.java \
+              src/libpjsua2maui.android/org/pjsip/*.java \
               src/libpjsua2maui.android/pjsua2maui/pjsua2/*.cs \
               src/libpjsua2maui.ios/pjsua2maui/pjsua2/*.cs \
               src/libpjsua2maui.mac/pjsua2maui/pjsua2/*.cs \
