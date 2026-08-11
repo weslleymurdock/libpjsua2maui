@@ -24,9 +24,9 @@
  
 	<PropertyGroup>
 		<PackageId>libpjsua2maui.android</PackageId>
-	    <Version>2.17.0.1</Version>
-		<AssemblyVersion>2.17.0.1</AssemblyVersion>
-		<FileVersion>2.17.0.1</FileVersion>
+	    <Version>2.17.0.2</Version>
+		<AssemblyVersion>2.17.0.2</AssemblyVersion>
+		<FileVersion>2.17.0.2</FileVersion>
 		<Title>PJSIP bindings for .NET MAUI</Title>
 	    <Authors>Weslley Murdock</Authors>
 	    <Company>Remote Code Hub</Company>
@@ -46,9 +46,15 @@ https://github.com/remotecodehub/libpjsua2maui/blob/main/README.md and
 https://github.com/remotecodehub/libpjsua2maui/blob/main/CHANGELOG.md
 		</Description>
 		<PackageProjectUrl>https://github.com/remotecodehub/libpjsua2maui</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/remotecodehub/libpjsua2maui/libpjsua2maui.git</RepositoryUrl>
+		<RepositoryUrl>https://github.com/remotecodehub/libpjsua2maui.git</RepositoryUrl>
 	</PropertyGroup>
-		
+	<ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+    </ItemGroup>
+	<PropertyGroup>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	</PropertyGroup>	
 	<ItemGroup>
         <None Update="..\LICENSE">
             <PackagePath>\</PackagePath>
@@ -63,5 +69,11 @@ https://github.com/remotecodehub/libpjsua2maui/blob/main/CHANGELOG.md
             <Pack>True</Pack>
         </None>
 	</ItemGroup>
-	
+	<ItemGroup>
+		<Compile Remove="**\*.java" />
+    </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>portable</DebugType>
+	</PropertyGroup>
 </Project>

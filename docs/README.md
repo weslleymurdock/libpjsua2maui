@@ -142,7 +142,7 @@ public class SoftCall : Call
 }
 ```
 
-2 . For callbacks of the classes from the package, is necessary to override the callbacks from the classes of package, and it's recommended use the Monitor pattern to comunicate the events between classes.
+2 . For callbacks of the classes from the package, is necessary to override the callbacks from the classes of package, and it's recommended use the Monitor pattern to trigger the events between classes.
 
 3 . For Video its necessary implement a handler for the UI of video window that will be rendered. Same for iOS.
 
