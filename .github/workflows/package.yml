@@ -2929,14 +2929,16 @@ jobs:
       - name: NuGet login (OIDC) and package push
         id: login 
         if: startsWith(github.ref, 'refs/tags/')
-        uses: NuGet/login@v1 
+        uses: NuGet/login@v1
         with:
-          user: weslleyluiz
+          user: ${{ env.USERNAME }}  
+        env:
+          USERNAME: ${{ secrets.USER_NAME }}
 
       - name: Pack NuGet Package
         if: steps.cache-libs.outputs.cache-hit != 'true'
+        working-directory: ${{ github.workspace }}/src
         run: |
-          cd ${{ github.workspace }}/src
           nuget pack libpjsua2maui.nuspec \
             -Version "${{ env.VERSION }}" \
             -BasePath "${{ github.workspace }}/src" \
